@@ -1,13 +1,36 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const mysql = require('mysql');
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'me',
+  password : 'secret',
+  database : 'my_db'
+});
+ 
+connection.connect();
+
 
 app.use(express.static(__dirname + "../public"));
+
+
 
 
 app.get('/', (req, res) => {
   return res.sendFile(path.resolve(__dirname, '../public/index.html'));
 });
+
+app.post('/register',(req,res)=>{
+
+})
+
+app.post('/',(req,res)=>{
+  const username = req.body.username;
+  const password =req.body.password;
+
+})
 
 
 // if (process.env.NODE_ENV !== 'development') {
