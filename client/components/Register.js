@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 
-const LoginAndRegister = ()=> {
+const Register = ()=> {
     // const [userNameReg,setUsernameReg]=useState('');
     // const [userPasswordReg,setUserPasswordReg]=useState('');
 
@@ -24,15 +24,9 @@ const LoginAndRegister = ()=> {
               <input type="password" name="reEnterPassword" placeholder="Re-enter Password" ></input>
               <button className="button" >Register</button>
         </div>
-        {/* <div className="login">
-        <h2>Login</h2>
-        <input type="text" placeholder="Your Email" ></input>
-        <input type="password" placeholder="Your Password" ></input>
-        <button className="button" >Login</button>
-
-        </div> */}
+       
     </div>
     )
 }
 
-export default LoginAndRegister;
+export default Register;
