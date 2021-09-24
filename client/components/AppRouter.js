@@ -7,6 +7,7 @@ import {
   } from 'react-router-dom';
   import LoginAndRegister from './LoginAndRegister';
   import App from './App';
+  import Login from './Login';
 
  class AppRouter extends React.Component{
    render(){
@@ -15,6 +16,7 @@ import {
          <Switch>
          <Route exact path="/register" component={LoginAndRegister} />
          <Route path='/' component={App} />
+         <Route path='/login' component={LoginAndRegister} />
          </Switch>
          
          
