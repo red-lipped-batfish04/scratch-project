@@ -18,7 +18,7 @@ const App = () => {
   // const [userNameReg,setUsernameReg]=useState('');
   // const [userPasswordReg,setUserPasswordReg]=useState('');
 
-  const Home = () => <div>LoginAndRegister</div>;
+  //const Home = () => <div>LoginAndRegister</div>;
 
 
 
@@ -33,18 +33,13 @@ const App = () => {
   
   return (
     <main>
-    <Router>
     
-    <Link to="/register">Register</Link>
    
-    <Route exact path="/register" component={LoginAndRegister} />
-   
-   </Router>
 
     <h1>Habit application</h1>
-    {/* <a href='http://localhost:8080/register'>
+    <a href='http://localhost:8080/register'>
         <button className='buttonLogin'>Login/Register</button>
-    </a> */}
+    </a>
     
    
 
@@ -56,14 +51,14 @@ const App = () => {
       <input type="password" name="reEnterPassword" placeholder="Re-enter Password" ></input>
       <button className="button" >Register</button>
     </div> */}
-    <div className="login">
+     <div className="login">
       <h2>Login</h2>
       <input type="text" placeholder="Your Email" ></input>
       <input type="password" placeholder="Your Password" ></input>
       <button className="button" >Login</button>
 
     </div>
-     
+      
      
     
     </main>

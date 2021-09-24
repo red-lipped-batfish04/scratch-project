@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
   database : 'my_db'
 });
  
-connection.connect();
+//connection.connect();
 
 
 app.use(express.static(__dirname + "../public"));
@@ -19,7 +19,8 @@ app.use(express.static(__dirname + "../public"));
 
 
 app.get('/', (req, res) => {
-  return res.sendFile(path.resolve(__dirname, '../public/index.html'));
+  //return res.sendFile(path.resolve(__dirname, '../public/index.html'));
+  return res.status(200).send('in the server');
 });
 
 app.post('/register',(req,res)=>{
