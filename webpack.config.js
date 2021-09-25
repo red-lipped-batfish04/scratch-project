@@ -59,5 +59,5 @@ module.exports = {
     plugins: [new HtmlWebpackPlugin({
         title: "Scratch Project",
         template: "./public/index.html"
-      }), new Dotenv(), new MiniCssExtractPlugin()],
+      }), new MiniCssExtractPlugin()],
 };
