@@ -4,8 +4,9 @@ const path = require('path');
 const mysql = require('mysql');
 const cors = require('cors');
 
-app.use(express.json());
+app.use(express.json());//allow api for parsing json
 app.use(cors());
+app.use(express.urlencoded());//allow api to receive data from client app
 
 var db = mysql.createConnection({
   host     : 'localhost',
