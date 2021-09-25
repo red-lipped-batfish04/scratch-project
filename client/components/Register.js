@@ -11,9 +11,9 @@ const Register = ()=> {
 
     const register = () =>{
       // 9/24 check should use 8080 or 3000 port
-      if( username && email && password && (password === reEnterPassword)){
+      if( name && email && password && (password === reEnterPassword)){
         Axios.post('http://localhost:8080/register',{
-          username:username,
+          name:name,
           email:email,
           password:password,
           reEnterPassword:reEnterPassword
