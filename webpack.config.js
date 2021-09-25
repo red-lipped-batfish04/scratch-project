@@ -21,7 +21,7 @@ module.exports = {
         static: path.resolve(__dirname, 'public'),
         port: 8080,
         // Enable compression
-        compress: true,
+        compress: true, 
         // Enable hot reloading
         hot:true,
         historyApiFallback: true,
