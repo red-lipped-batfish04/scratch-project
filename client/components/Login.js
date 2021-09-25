@@ -1,26 +1,24 @@
 import React, {useState } from 'react';
-
+import { useHistory } from "react-router-dom";
 import Axios from 'axios';
 
 
 
 const Login = () => {
 
-  // const [username,setUsername]=useState('');
-  // const [password,setPassword]=useState('');
-  // const [userNameReg,setUsernameReg]=useState('');
-  // const [userPasswordReg,setUserPasswordReg]=useState('');
+  const [loginEmail,setLoginEmail]=useState('');
+  const [loginPassword,setLoginPassword]=useState('');
 
+  const history = useHistory();
   
-
-
 
   const login = () =>{
     Axios.post('http://localhost:8080/',{
-      username:username,
+      email:email,
       password:password
     }).then((res)=>{
-      console.log(res)
+      console.log(res)//or res.data
+      history.push("/habits"); // 9/24 should double check which page to be linked after logged 
     });
   }
   
@@ -37,9 +35,9 @@ const Login = () => {
     
      <div className="login">
       <h2>Login</h2>
-      <input type="text" placeholder="Your Email" ></input>
-      <input type="password" placeholder="Your Password" ></input>
-      <button className="button" >Login</button>
+      <input onChange={(e)=>{setLoginEmail(e.target.value)}} type="text" placeholder="Your Email" ></input>
+      <input onChange={(e)=>{setLoginPassword(e.target.value)}} type="password" placeholder="Your Password" ></input>
+      <button onClick={login} className="button" >Login</button>
 
     </div>
       
