@@ -2,10 +2,10 @@ import React,{useState} from 'react';
 import { useHistory } from "react-router-dom";
 
 const Register = ()=> {
-    const [usernameReg,setUsernameReg]=useState('');
-    const [emailReg,setEmailReg]=useState('');
-    const [passwordReg,setPasswordReg]=useState('');
-    const [reEnterPasswordReg,setReEnterPasswordReg]=useState('');
+    const [ usernameReg, setUsernameReg ] = useState('');
+    const [ emailReg, setEmailReg ] = useState('');
+    const [ passwordReg, setPasswordReg ] = useState('');
+    const [ reEnterPasswordReg, setReEnterPasswordReg ] = useState('');
 
     const history = useHistory();
 
