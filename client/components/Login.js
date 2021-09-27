@@ -13,7 +13,7 @@ const Login = () => {
   
 
   const login = () =>{
-    Axios.post('http://localhost:8080/',{
+    Axios.post('http://localhost:8080/', {
       email:email,
       password:password
     }).then((res)=>{
@@ -24,28 +24,15 @@ const Login = () => {
   
   return (
     <main>
-    
-   
-
     <h1>Habit application in Login.js</h1>
-    
-    
-   
-
-    
-     <div className="login">
+    <div className="login">
       <h2>Login</h2>
       <input onChange={(e)=>{setLoginEmail(e.target.value)}} type="text" placeholder="Your Email" ></input>
       <input onChange={(e)=>{setLoginPassword(e.target.value)}} type="password" placeholder="Your Password" ></input>
       <button onClick={login} className="button" >Login</button>
-
     </div>
-      
-     
-    
     </main>
   )
-
 }
 
 export default Login;
