@@ -4,8 +4,8 @@ const authUserController = require('../controllers/authUserController');
 
 const router = express.Router();
   
-// verify user email and password, create cookie and store   
-router.post('/login', authUserController.verifyUser, cookieController.createSession, (req, res) => {
+// verify user email and password, create session cookie and store   
+router.post('/login', authUserController.verifyUser, (req, res) => {
   const response = {
     name: res.locals.user.name,
     email: res.locals.user.email,

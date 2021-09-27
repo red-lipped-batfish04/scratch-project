@@ -25,29 +25,29 @@ module.exports = {
 		// Enable hot reloading
 		hot:true,
 		historyApiFallback: true,
-		proxy: {
-			"/": {
-			  target: 'http://localhost:3000/',
-			  secure: false,
-			},
-			"/login": {
-				target: 'http://localhost:3000/',
-				secure: false,
-			},
-			"/register": {
-				target: 'http://localhost:3000/',
-				secure: false,
-			},
-			"/addhabits": {
-				target: 'http://localhost:3000/',
-				secure: false,
-			},
-			"/habits": {
-				target: 'http://localhost:3000/',
-				secure: false,
-			},
+		// proxy: {
+		// 	"/": {
+		// 	  target: 'http://localhost:3000/',
+		// 	  secure: false,
+		// 	},
+		// 	"/login": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/register": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/addhabits": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/habits": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
 
-		},
+		// },
 	},
 
 	module: {
