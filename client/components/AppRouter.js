@@ -16,12 +16,11 @@ class AppRouter extends React.Component {
     return (
       <BrowserRouter>
       <Switch>
-        <Route exact path='/habits' component={Habits} /> 
-        <Route exact path='/addhabit' component={AddHabit} /> 
-        <Route exact path='/login' component={Login} /> 
+        <Route exact path="/habits" component={Habits} /> 
+        <Route exact path="/addhabit" component={AddHabit} /> 
+        <Route exact path="/login" component={Login} /> 
         <Route exact path="/register" component={Register} />
-        <Route path='/' component={App} />
-         
+        <Route path="/" component={App} />
       </Switch>   
       </BrowserRouter>  
     )

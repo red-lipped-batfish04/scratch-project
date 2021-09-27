@@ -1,51 +1,31 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-// const mysql = require('mysql');
 const cors = require('cors');
 const db = require('../models/usersDatabaseModels.js');
 
-app.use(express.json());//allow api for parsing json
+// allow api for parsing json
+app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded());//allow api to receive data from client app
 
-// var db = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'me',
-//   password : 'secret',
-//   database : 'my_db'
-// });
- 
-// db.connect(function(err) {
-//   if (err) throw err;
-//   con.query("SELECT * FROM users", function (err, result, fields) {
-//     if (err) throw err;
-//     console.log(result);
-//   });
-// });
+// allow api to receive data from client app
+app.use(express.urlencoded());
 
-
-
-
+// express rendering of static imgs, etc.
 app.use(express.static(__dirname + "../public"));
 
 
-
-
 app.get('/', (req, res) => {
-  //return res.sendFile(path.resolve(__dirname, '../public/index.html'));
   let getdata = db.query('SELECT name FROM users');
   console.log(getdata); 
   return res.status(200).send('in the server');
 });
 
 app.post('/register',(req,res)=>{
-  //9/24 sql data is array or obj?
   const name = req.body.name;
   const email = req.body.email;
   const password =req.body.password;
    
-  // ? refer to req.body
   db.query('INSERT INTO users(name,email,password) VALUES (?,?,?)', [name,email,password],(err,result)=>{
     console.log(err,result);//result from query
   } )
