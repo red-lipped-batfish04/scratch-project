@@ -1,15 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from '../client/components/App';
-import { BrowserRouter } from 'react-router-dom';
-import AppRouter from '../client/components/AppRouter';
+import App from '../client/App';
+import { BrowserRouter } from "react-router-dom";
+
 
 
 render(
-  <div>
-
-   <AppRouter/>
-  </div>
- ,
-  document.getElementById('root')
+	<BrowserRouter>
+		<App />
+	</BrowserRouter>,
+	document.getElementById("root")
 );
