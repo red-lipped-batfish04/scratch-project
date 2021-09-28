@@ -1,4 +1,5 @@
 CREATE TABLE public.users (
+	"_id" serial NOT NULL,
 	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
