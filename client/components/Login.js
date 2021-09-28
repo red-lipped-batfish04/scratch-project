@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-import Axios from 'axios';
+import axios from 'axios';
 
 const Login = (props) => {
   
   const history = useHistory();
 
   // initial state for Login component
-  const [ state, setState ] = useState({
+  const [state, setState] = useState({
     email: '',
     password: '',
     success: null,
@@ -30,8 +30,7 @@ const Login = (props) => {
       "password" : state.password,
     }
 
-    // ------> THIS URL IS NOT PROPERLY WORKING, HAVE TRIED 8080, HAVE TRIED 3000, WHAT'S THE ISSUE? HELP - AY <------ //
-    Axios.post('http://localhost:3000/login', payload)
+    axios.post('http://localhost:3000/login', payload)
       .then((res) => {
         if (res.status === 200) {
           setState(prevState => ({
@@ -53,8 +52,9 @@ const Login = (props) => {
     });
   }
   
+
   return (
-    <main>
+    <div>
       <h1>Habit application in Login.js</h1>
       <div className="login">
         <h2>Login</h2>
@@ -78,7 +78,7 @@ const Login = (props) => {
           <button onClick={handleSubmitClick} className="button" >Login</button>
         </form>
       </div>
-    </main>
+    </div>
   )
 }
 
