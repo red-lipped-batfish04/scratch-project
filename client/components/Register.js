@@ -32,12 +32,14 @@ const Register = (props) => {
 
   // handle click on registration
   const handleSubmitClick = (e) => {
+    e.preventDefault();
     if (state.password === state.confirmPassword && state.name && state.email) {
       const payload = {
         "name": state.name,
         "email": state.email,
         "password": state.password,
-      }
+        "phoneNumber": state.phoneNumber,
+      };
 
       axios.post('http://localhost:3000/register', payload)
       .then(res => {
@@ -48,13 +50,16 @@ const Register = (props) => {
           }));
           // push to homepage
           history.push('/habits')
+        } else {
+          console.log('I like turtles.')
         }
       })
       .catch(error => {
         console.log(error)
       });
-
-    } else {
+    } 
+    
+    else {
       res.send('Please enter valid name, email & password');
     }
   }
@@ -95,6 +100,14 @@ const Register = (props) => {
                 value={state.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm Password"
+              />
+            </div>
+            <div className="reg-phone-input">
+                <input type='phoneNumber' 
+                id='phoneNumber' 
+                value={state.phoneNumber}
+                onChange={handleChange}
+                placeholder="Enter Phone Number for Text Notifications"
               />
             </div>
             <button

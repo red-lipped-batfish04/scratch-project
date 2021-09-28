@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 // allow api to receive data from client app
-app.use(express.urlencoded());
+// app.use(express.urlencoded());
 
 // express rendering of static imgs, etc.
 app.use(express.static(__dirname + "../public"));

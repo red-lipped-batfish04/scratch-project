@@ -1,13 +1,11 @@
 const express = require('express');
 const cookieController = require('../controllers/cookieController.js');
-const authUserController = require('../controllers/authUserController');
-
+const userController = require('../controllers/userController');
 const router = express.Router();
   
 // verify user email and password, create session cookie and store   
-router.post('/', authUserController.verifyUser, (req, res) => {
+router.post('/', userController.verifyUser, (req, res) => {
   const response = res.locals.user
-
   if (res.locals.registrationStatus === false) {
     return res.status(404).send('User not found');
   }

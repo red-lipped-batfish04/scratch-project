@@ -3,8 +3,8 @@ CREATE TABLE public.users (
 	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
-	"phone_number" bigint,
-	"timezone" time with time zone NOT NULL,
+	"phone_number" varchar,
+	"timezone" timestamptz NOT NULL,
 	"darkmode_setting" BOOLEAN NOT NULL DEFAULT 'true',
 	CONSTRAINT "users_pk" PRIMARY KEY ("email")
 ) WITH (

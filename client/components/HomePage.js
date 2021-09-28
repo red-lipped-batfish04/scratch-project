@@ -19,7 +19,7 @@ const HomePage = () => {
 	const history = useHistory();
 	const loginRedirect = () => {
 		console.log("I like Turtles");
-		history.push("/habits");
+		history.push("/login");
 	};
 
 	return (

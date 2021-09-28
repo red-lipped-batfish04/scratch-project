@@ -3,16 +3,16 @@ const bcrypt = require('bcrypt');
 
 
 // ----- CONTROLLER FOR REGISTRATION AND USER LOGIN VERIFICATIONS ------
-const authUserController = {};
+const userController = {};
 
 // create user controller for registerRouter
-authUserController.createUser = async (req, res, next) => {
+userController.createUser = async (req, res, next) => {
   try {
     const SALT_WORK_FACTOR = 10;
     // pull out name, email, password & phone number from request body registration page
-    const { name, email, password, phone_number } = req.body;
+    const { name, email, password, phoneNumber } = req.body;
 
-    // if name, email or password are null, redirect them to register page
+    // if name, email or password are null, registration status is false
     if (password === null || email === null || name === null) {
       res.locals.registrationStatus = false;
       return next();
@@ -22,29 +22,33 @@ authUserController.createUser = async (req, res, next) => {
     const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
     const crypt_password = await bcrypt.hash(password, salt);
 
+    // query for current time (need for time zone)
+    const timeQuery = `SELECT NOW();`
+    const timeResults = await db.query(timeQuery);
+    const time = timeResults.rows[0].now;
+
     // add user to database 
-    const addUserQuery = `INSERT INTO users (name, email, password, timezone, phone_number, darkmode_setting)
+    const addUserQuery = `INSERT INTO users (name, email, password, phone_number, timezone, darkmode_setting)
     VALUES ($1, $2, $3, $4, $5, $6) 
     RETURNING _id;`;
-    const values = [ name, email, crypt_password, '2021-09-28 16:00:00 America/Los_Angeles', phone_number, true ];
-    const addedUser = await db.query(addUserQuery, values);
+    const values = [ name, email, crypt_password, phoneNumber, time, true ];
+    const addedUserID = await db.query(addUserQuery, values);
     
     // store user in res.locals
     res.locals.user = { name: name, email: email };
-    res.locals._id = addedUser.rows[0]._id;
+    res.locals._id = addedUserID.rows[0]._id;
     res.locals.registrationStatus = true;
-
     return next();
   }
 
   catch (error) {
-    return res.redirect('/login', {error});
+    return res.redirect('/login');
   }
 };
 
 
 // verify user controller for loginRouter
-authUserController.verifyUser = async (req, res, next) => {
+userController.verifyUser = async (req, res, next) => {
   try {
     // users will login with email and password, deconstruct from request body
     const { email, password } = req.body;
@@ -90,4 +94,4 @@ authUserController.verifyUser = async (req, res, next) => {
   }
 };
 
-module.exports = authUserController;
+module.exports = userController;
