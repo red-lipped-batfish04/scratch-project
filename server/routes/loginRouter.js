@@ -5,11 +5,12 @@ const authUserController = require('../controllers/authUserController');
 const router = express.Router();
   
 // verify user email and password, create session cookie and store   
-router.post('/login', authUserController.verifyUser, (req, res) => {
-  const response = {
-    name: res.locals.user.name,
-    email: res.locals.user.email,
-  };
+router.post('/', authUserController.verifyUser, (req, res) => {
+  const response = res.locals.user
+
+  if (res.locals.registrationStatus === false) {
+    return res.status(404).send('User not found');
+  }
   return res.status(200).json(response);
 });
 

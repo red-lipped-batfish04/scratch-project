@@ -6,7 +6,7 @@ import AppRouter from '../client/components/AppRouter';
 
 render(
   <div>
-   <AppRouter/>
+    <AppRouter/>
   </div>
  , document.getElementById('root')
 );

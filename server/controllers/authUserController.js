@@ -14,7 +14,8 @@ authUserController.createUser = async (req, res, next) => {
 
     // if name, email or password are null, redirect them to register page
     if (password === null || email === null || name === null) {
-      return res.redirect('/register')
+      res.locals.registrationStatus = false;
+      return next();
     }
 
     // generate salt and bcrypt password
@@ -26,10 +27,12 @@ authUserController.createUser = async (req, res, next) => {
     VALUES ($1, $2, $3, $4, $5, $6) 
     RETURNING _id;`;
     const values = [ name, email, crypt_password, '2021-09-28 16:00:00 America/Los_Angeles', phone_number, true ];
-    const addedId = await db.query(addUserQuery, values);
+    const addedUser = await db.query(addUserQuery, values);
     
     // store user in res.locals
     res.locals.user = { name: name, email: email };
+    res.locals._id = addedUser.rows[0]._id;
+    res.locals.registrationStatus = true;
 
     return next();
   }
@@ -48,29 +51,36 @@ authUserController.verifyUser = async (req, res, next) => {
 
     // database query to find user
     const findUserQuery = `SELECT password, _id, name
-    FROM user WHERE email = $1;`;
-    const value = [ email ] ;
+    FROM users WHERE email = $1;`;
+    const value = [email] ;
     const returnedQuery = await db.query(findUserQuery, value);
+    console.log(returnedQuery.rows[0])
 
     // if returned results does not give back user, redirect back to register page:
     if (returnedQuery.rows[0] === undefined) {
-      return res.redirect('/register')
+      res.locals.registrationStatus = false;
+      return next();
     }
 
     // take returned hashed password from query and compare to entered password from login req.body 
     const hashedPassword = returnedQuery.rows[0].password;
+    const userID = returnedQuery.rows[0]._id;
     const verify = await bcrypt.compare(password, hashedPassword);
-
+  
     // if verification is false, redirect to login page
     if (verify === false) {
-      return res.redirect('/login');
+      res.locals.registrationStatus = false;
+      return next();
     }
   
     else {
+      res.locals._id = userID;
       res.locals.user = {
         name: returnedQuery.rows[0]['name'],
-        email: returnedQuery.rows[0]['email']
+        email: returnedQuery.rows[0]['email'],
       };
+      res.locals.registrationStatus = true;
+
       return next();
     }
   }
