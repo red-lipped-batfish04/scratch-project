@@ -18,3 +18,5 @@ router.put('/', (req, res, next) => {
   // return confirmation
 
 });
+
+module.exports = router;
