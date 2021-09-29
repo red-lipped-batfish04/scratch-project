@@ -10,6 +10,7 @@ import {
   import Login from './Login';
   import Habits from './Habits';
   import AddHabit from './AddHabit';
+  import Friends from './Friends';
 
 class AppRouter extends React.Component {
   render() {
@@ -17,6 +18,7 @@ class AppRouter extends React.Component {
       <BrowserRouter>
       <Switch>
         <Route exact path="/habits" component={Habits} /> 
+        <Route exact path="/friends" component={Friends} /> 
         <Route exact path="/addhabit" component={AddHabit} /> 
         <Route exact path="/login" component={Login} /> 
         <Route exact path="/register" component={Register} />

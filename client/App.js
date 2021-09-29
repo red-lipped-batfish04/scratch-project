@@ -5,6 +5,9 @@ import HomePage from './components/HomePage'
 import Login from './components/Login'
 import Register from './components/Register';
 import HabitDashboard from './components/HabitDashboard';
+import Friends from './components/Friends';
+
+
 
 const App = () => {
 
@@ -23,6 +26,10 @@ const App = () => {
 				<Route path="/habits" exact>
 					<HabitDashboard />
 				</Route>
+				<Route path="/friends" exact>
+					<Friends />
+				</Route>
+				
 			</Switch>
 		</ChakraProvider>
 	);
