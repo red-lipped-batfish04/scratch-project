@@ -1,5 +1,5 @@
 # Habit Tribes - Social habit tracking community
-Habit tribes is a light weight, web based habit tracking application and social network. Set goals of creating new habits, or quiting old habits. Create sequential reminders with your self recorded motivation when you create your new goals. Share your goals with a community and your friends. Record and send messages to your tribe supporting them and holding them accountable to their goals.
+Habit Tribes is a light weight, web based habit tracking application and social network. Set goals of creating new habits, or quiting old habits. Create sequential reminders with your self recorded motivation when you create your new goals. Share your goals with a community and your friends. Record and send messages to your tribe supporting them and holding them accountable to their goals.
 
 
 # Screenshots
