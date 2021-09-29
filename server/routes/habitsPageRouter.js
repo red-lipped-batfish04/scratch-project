@@ -30,3 +30,4 @@ router.put('/completed/:id', (req, res, next) => {
 
 });
 
+module.exports = router;
