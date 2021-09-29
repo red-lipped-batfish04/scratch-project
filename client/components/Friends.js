@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { ChakraProvider} from "@chakra-ui/react";
 import { Box,Badge,Avatar,Button } from "@chakra-ui/react";
+import axios from 'axios';
 
-const AllUsers = () => {
+const AllUsers = (props) => { 
 
     const [allUsers,setAllUsers] = useState([]);
 
-    const testUser = ['a','b'];// in renderUsers should use allUsers as argument;
+    
 
     //get all users from server and update allUsers arr;
     useEffect(() => {
         console.log('in useEffect');
-        fetch('/friends')
-          .then(response => response.json())
+        fetch('http://localhost:3000/friends',{headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            }
+           })
+          .then(response => response.json()) //[{name:aa},{name:bb}]
           .then(result => {
-            const folder = result;
+           
+            const folder = [];
+            console.log('folder in useEffect >>',folder);
+            result.forEach(obj=>{
+                folder.push(obj.name);
+            })
             
             console.log('folder in useEffect >>',folder);
     
@@ -23,22 +33,24 @@ const AllUsers = () => {
           });
       },[]);
 
-    
+
 
     const property = {
         
-        name: "Eric Mulhern",
         NumOfHabits:4,
         AvgCompleted:'89%',
        
       }
-
+      
       const renderUsers = (users) =>{
-        
-
+           let name;
+           let i=0;
+           //each loop change the users index to get every user 
         return users.map((user)=>{
-            
-
+           name=users[i] 
+           console.log('name',name)
+           i++
+           
             return (
            
                 <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
@@ -51,7 +63,7 @@ const AllUsers = () => {
                      as="h4"
                      lineHeight="tight"
                      isTruncated
-                   > <Avatar size="2xl" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />{property.name}
+                   > <Avatar size="2xl" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />{name}
                      
                    </Box>
                    <Box
@@ -97,7 +109,9 @@ const AllUsers = () => {
           
         
        <div>
-        {renderUsers(testUser)}
+       
+       
+        {renderUsers(allUsers)}
         </div>
         
        

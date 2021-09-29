@@ -25,7 +25,7 @@ app.use(express.static(__dirname + "../public"));
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 // app.use('/habits', habitsPageRouter);
-// app.use('/friends', friendsPageRouter);
+app.use('/friends', friendsPageRouter);
 // app.use('/video', videoRouter);
 
 
