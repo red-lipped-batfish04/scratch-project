@@ -44,7 +44,7 @@ export const EmailRegisterForm = (props) => {
 				colorScheme="gray"
 				onClick={console.log("I'M LOGGING IN!")}
 			>
-				Login
+				Sign up
 			</Button>
 		</chakra.form>
 	);

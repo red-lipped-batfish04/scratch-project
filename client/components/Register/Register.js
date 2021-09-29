@@ -116,6 +116,7 @@ const Register = (props) => {
 							<Link
 								fontWeight="semibold"
 								color={useColorModeValue("blue.600", "blue.300")}
+								href='/login'
 							>
 								Login
 							</Link>

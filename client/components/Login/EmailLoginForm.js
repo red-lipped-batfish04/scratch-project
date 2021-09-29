@@ -1,6 +1,8 @@
 import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { chakra, useColorModeValue } from "@chakra-ui/system";
 import React, { useState } from 'react';
+import { useHistory } from "react-router";
+import axios from 'axios'
 
 export const EmailLoginForm = (props) => {
   function PasswordInput() {
@@ -8,12 +10,57 @@ export const EmailLoginForm = (props) => {
     const handleClick = () => setShow(!show)
   }
   
+  const history = useHistory();
+
+  // initial state for Login component
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+    success: null,
+  })
+
+  // handle typed inputs
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setState(prevState => ({
+      ...prevState,
+      [id] : value
+    }))
+  }
+
+  // post request for logging in
+  const handleSubmitClick = (e) => {
+    e.preventDefault();
+    const payload = {
+      "email" : state.email,
+      "password" : state.password,
+    }
+
+    axios.post('http://localhost:3000/login', payload)
+      .then((res) => {
+        if (res.status === 200) {
+          setState(prevState => ({
+            ...prevState,
+            'success' : 'Log in successful, redirecting to homepage...'
+          }))
+          // push to homepage
+          history.push('/habits')
+        }
+        else if (res.status === 204) {
+          res.send('Email and password do not match')
+        }
+        else {
+          res.status(404).send('Email does not exist')
+        }
+    })
+    .catch(error => {
+      console.log(error)
+    });
+  }
   
+
   return (
 
-
-    
-    
     <chakra.form width="full" {...props}>
       <FormControl>
         <FormLabel
@@ -26,19 +73,25 @@ export const EmailLoginForm = (props) => {
           or login with email
 			</FormLabel>
         <Input
+          id='email'
           type="email"
           placeholder="Email address"
           _placeholder={{
             color: useColorModeValue("gray.600", "gray.400"),
           }}
+          onChange={handleChange}
+          value={state.email}
         />
         <Input
+          id='password'
           mt={2}
           type="password"
           placeholder="Password"
           _placeholder={{
             color: useColorModeValue("gray.600", "gray.400"),
           }}
+          onChange={handleChange}
+          value={state.password}
         />
         
       </FormControl>
@@ -48,7 +101,7 @@ export const EmailLoginForm = (props) => {
         fontSize="sm"
         fontWeight="bold"
         colorScheme="gray"
-        onClick={console.log("I'M LOGGING IN!")}
+        onClick={handleSubmitClick}
       >
         Login
 		</Button>

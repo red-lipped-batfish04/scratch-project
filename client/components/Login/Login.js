@@ -11,60 +11,9 @@ import {
 import { Card } from "../Login/Card";
 import { EmailLoginForm } from "../Login/EmailLoginForm";
 import { GoogleLoginButton } from "../Login/GoogleLoginButton";
-import { useHistory } from "react-router-dom";
-import axios from 'axios';
 
 const Login = (props) => {
   
-  const history = useHistory();
-
-  // initial state for Login component
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-    success: null,
-  })
-
-  // handle typed inputs
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState(prevState => ({
-      ...prevState,
-      [id] : value
-    }))
-  }
-
-  // post request for logging in
-  const handleSubmitClick = (e) => {
-    e.preventDefault();
-    const payload = {
-      "email" : state.email,
-      "password" : state.password,
-    }
-
-    axios.post('http://localhost:3000/login', payload)
-      .then((res) => {
-        if (res.status === 200) {
-          setState(prevState => ({
-            ...prevState,
-            'success' : 'Log in successful, redirecting to homepage...'
-          }))
-          // push to homepage
-          history.push('/habits')
-        }
-        else if (res.status === 204) {
-          res.send('Email and password do not match')
-        }
-        else {
-          res.status(404).send('Email does not exist')
-        }
-    })
-    .catch(error => {
-      console.log(error)
-    });
-  }
-  
-
   return (
 		<>
 			{/* // start new component */}
@@ -104,6 +53,7 @@ const Login = (props) => {
 							<Link
 								fontWeight="semibold"
 								color={useColorModeValue("blue.600", "blue.300")}
+								href='/register'
 							>
 								Sign up
 							</Link>
@@ -123,7 +73,7 @@ const Login = (props) => {
 			</Box>
 
 			{/* // end new component */}
-			<div>
+			{/* <div>
 				<h1>Habit application in Login.js</h1>
 				<div className="login">
 					<h2>Login</h2>
@@ -151,7 +101,7 @@ const Login = (props) => {
 						</button>
 					</form>
 				</div>
-			</div>
+			</div> */}
 		</>
 	);
 }
