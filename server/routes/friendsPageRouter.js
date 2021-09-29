@@ -7,13 +7,13 @@ router.get('/', (req, res, next) => {
 
 });
 
-router.post('/addFriend', (req, res, next) => {
+router.post('/', (req, res, next) => {
   // first invoke controller to make friend request
   // return confirmation
 
 });
 
-router.put('/addFriend', (req, res, next) => {
+router.put('/', (req, res, next) => {
   // first invoke controller to confirm friend request
   // return confirmation
 

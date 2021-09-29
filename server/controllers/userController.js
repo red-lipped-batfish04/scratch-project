@@ -1,6 +1,6 @@
 // ----- CONTROLLER FOR REGISTRATION AND USER LOGIN VERIFICATIONS ------
 const userController = {};
-const db = require('../models/db.js');
+const db = require('../models/usersDatabaseModels.js');
 
 // create user controller for registerRouter
 userController.createUser = async (req, res, next) => {
