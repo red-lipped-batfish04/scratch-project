@@ -6,8 +6,13 @@ const cookieController = {};
 // create session cookie
 cookieController.createSession = async (req, res, next) => {
   try {
-    const token = await jwt.sign({ id: res.locals._id }, process.env.SECRET_SALT);
-    res.cookie('ssid', token, {maxAge: 300000});
+    if (res.locals.registrationStatus === false) {
+      return next();
+    }
+
+    // process.env secrets are not working need to fix
+    const token = await jwt.sign({ id: res.locals._id }, 'process.env.SECRET_SALT');
+    res.cookie('ssid', token, {httpOnly: true});
     return next();
   } 
   catch (err) {
@@ -18,11 +23,11 @@ cookieController.createSession = async (req, res, next) => {
 cookieController.verifyToken = async (req, res, next) => {
   try{
     const token = req.body.token;
-    const id = await jwt.verify(token, process.env.SECRET_SALT);
-    if (id) {
-      res.locals.tokenVerify = true;
+    const verification = await jwt.verify(token, 'process.env.SECRET_SALT');
+    if (verification) {
+      res.locals.tokenVerification = true;
     }
-    else res.locals.tokenVerify = false;
+    else res.locals.tokenVerification = false;
     return next();
   }
   catch (err) {return next(err);}

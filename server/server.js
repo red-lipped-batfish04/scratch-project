@@ -20,10 +20,9 @@ app.use(express.static(__dirname + "../public"));
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 
-app.get('/', (req, res) => {
-  let getdata = db.query('SELECT name FROM users');
-  console.log(getdata); 
-  return res.status(200).send('in the server');
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(404).send('Internal Server Error');
 });
 
 

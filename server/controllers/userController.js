@@ -47,6 +47,7 @@ userController.createUser = async (req, res, next) => {
 };
 
 
+
 // verify user controller for loginRouter
 userController.verifyUser = async (req, res, next) => {
   try {

@@ -6,7 +6,7 @@ const router = express.Router();
 
 // register and creates user, create session cookie
 
-router.post('/', userController.createUser, (req, res) => {
+router.post('/', userController.createUser, cookieController.createSession, (req, res) => {
   const response = res.locals.user
   if (res.locals.registrationStatus === false) {
     return res.status(404).send('Please register again');
