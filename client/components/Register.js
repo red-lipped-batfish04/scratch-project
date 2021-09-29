@@ -1,45 +1,130 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
-const Register = ()=> {
-    const [usernameReg,setUsernameReg]=useState('');
-    const [emailReg,setEmailReg]=useState('');
-    const [passwordReg,setPasswordReg]=useState('');
-    const [reEnterPasswordReg,setReEnterPasswordReg]=useState('');
+const Register = (props) => {
 
-    const history = useHistory();
+  // declare initial state
+  const [state, setState] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    success: null,
+  })
+    
+  // typing change handler
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setState(prevState => ({
+      ...prevState,
+      [id] : value,
+    }));
+  };
 
-    const register = () =>{
-      // 9/24 check should use 8080 or 3000 port
-      if( name && email && password && (password === reEnterPassword)){
-        Axios.post('http://localhost:8080/register',{
-          name:name,
-          email:email,
-          password:password,
-          reEnterPassword:reEnterPassword
-        }).then((res)=>{
-          console.log(res)
-          history.push("/login")
-        });
-      } else {
-        alert("invalid input");
-      }
+  // history push pages
+  const history = useHistory();
+
+  // redirect to login page if already have an account
+  const redirectToLogin = () => {
+    history.push('/login')
+  }
+
+  // handle click on registration
+  const handleSubmitClick = (e) => {
+    e.preventDefault();
+    if (state.password === state.confirmPassword && state.name && state.email) {
+      const payload = {
+        "name": state.name,
+        "email": state.email,
+        "password": state.password,
+        "phoneNumber": state.phoneNumber,
+      };
+
+      axios.post('http://localhost:3000/register', payload)
+      .then(res => {
+        if (res.status === 200) {
+          setState(prevState => ({
+            ...prevState,
+            'success' : 'Registration successful, redirecting to homepage...'
+          }));
+          // push to homepage
+          history.push('/habits')
+        } else {
+          console.log('I like turtles.')
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      });
+    } 
+    
+    else {
+      res.send('Please enter valid name, email & password');
     }
+  }
 
-    return(
-        <div>
-            <h1>in React Register.js</h1>
-            <div className="register">
-              <h2>Registration</h2>
-              <input onChange={(e)=>{setUsernameReg(e.target.value)}} type="text" placeholder="Your Name" ></input>
-              <input onChange={(e)=>{setEmailReg(e.target.value)}} type="text" placeholder="Your Email" ></input>
-              <input onChange={(e)=>{setPasswordReg(e.target.value)}} type="password" placeholder="Your Password" ></input>
-              <input onChange={(e)=>{setReEnterPasswordReg(e.target.value)}} type="password" name="reEnterPassword" placeholder="Re-enter Password" ></input>
-              <button onClick={register} className="button" >Register</button>
-        </div>
-       
+  return (
+    <div>
+      <h1>in React Register.js</h1>
+        <form>
+          <div className="register">
+          <h2>Registration</h2>
+            <div className="reg-name-input">
+              <input type='name' 
+                id='name' 
+                value={state.name}
+                  onChange={handleChange}
+                placeholder="Enter Name"
+              />
+            </div>
+            <div className="reg-email-input">
+              <input type='email' 
+                id='email' 
+                value={state.email}
+                onChange={handleChange}
+                placeholder="Enter Email"
+              />
+            </div>
+            <div className="reg-password-input">
+              <input type='password' 
+                id='password' 
+                value={state.password}
+                onChange={handleChange}
+                placeholder="Enter Password"
+              />
+            </div>
+              <div className="reg-confirm-password">
+                <input type='password' 
+                id='confirmPassword' 
+                value={state.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm Password"
+              />
+            </div>
+            <div className="reg-phone-input">
+                <input type='phoneNumber' 
+                id='phoneNumber' 
+                value={state.phoneNumber}
+                onChange={handleChange}
+                placeholder="Enter Phone Number for Text Notifications"
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn-primary"
+              onClick={handleSubmitClick}>Register</button>
+          </div>
+          <div className="alert alert-success mt-2" style={{display: state.success ? 'block' : 'none' }} role="alert">
+            {state.success}
+          </div>
+          <div className="got-login">
+            <span>Already have an account?</span>
+            <button className="login-button" onClick={() => redirectToLogin()}>Login here</button>
+          </div>
+        </form> 
     </div>
-    )
-}
+  )
+};
 
 export default Register;

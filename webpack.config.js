@@ -5,59 +5,76 @@ const Dotenv = require('dotenv-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 require('dotenv').config();
 
-module.exports = {  
-    mode: process.env.NODE_ENV,
+module.exports = {
+	mode: 'development',
+	entry: './src/index.js',
 
-    entry: './src/index.js',
+	output: {
+		path: path.resolve(__dirname, 'dist'),
+		filename: 'bundle.js',
+		publicPath: '/',
+	},
 
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/',
-    },
+	devServer: {
+		// Serve index.html as the base
+		static: path.resolve(__dirname, 'public'),
+		host: 'localhost',
+		port: 8080,
+		// Enable compression
+		compress: true,
+		// Enable hot reloading
+		hot:true,
+		historyApiFallback: true,
+		// proxy: {
+		// 	"/": {
+		// 	  target: 'http://localhost:3000/',
+		// 	  secure: false,
+		// 	},
+		// 	"/login": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/register": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/addhabits": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
+		// 	"/habits": {
+		// 		target: 'http://localhost:3000/',
+		// 		secure: false,
+		// 	},
 
-    devServer: {
-        // Serve index.html as the base
-        static: path.resolve(__dirname, 'public'),
-        port: 8080,
-        // Enable compression
-        compress: true,
-        // Enable hot reloading
-        hot:true,
-        historyApiFallback: true,
-        // proxy: {
-        //     '/': {
-        //       target: 'http://localhost:3000/',
-        //       secure: false,
-        //     },
-        // }
-    },
+		// },
+	},
 
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react'],
-                    }
-                },
-            },
-            {
-                test: /\.(s(a|c)ss)$/,
-                use: ["style-loader", "css-loader"],
-            },
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
-            },
-        ],
-    },
+	module: {
+		rules: [
+			{
+				test: /\.(js|jsx)$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: ['@babel/preset-env', '@babel/preset-react'],
+					}
+				},
+			},
+			{
+				test: /\.(s(a|c)ss)$/,
+				use: ["style-loader", "css-loader"],
+			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				type: 'asset/resource',
+			},
+		],
+	},
 
-    plugins: [new HtmlWebpackPlugin({
-        title: "Scratch Project",
-        template: "./public/index.html"
-      }), new MiniCssExtractPlugin()],
+	plugins: [new HtmlWebpackPlugin({
+		title: "Scratch Project",
+		template: "./public/index.html"
+	  }), new Dotenv(), new MiniCssExtractPlugin()],
 };
