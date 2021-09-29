@@ -1,6 +1,8 @@
-// ----- CONTROLLER FOR REGISTRATION AND USER LOGIN VERIFICATIONS ------
-const userController = {};
+const bcrypt = require('bcrypt');
 const db = require('../models/usersDatabaseModels.js');
+
+
+const userController = {};
 
 // create user controller for registerRouter
 userController.createUser = async (req, res, next) => {
@@ -42,8 +44,6 @@ userController.createUser = async (req, res, next) => {
     return res.redirect('/login');
   }
 };
-
-
 
 // verify user controller for loginRouter
 userController.verifyUser = async (req, res, next) => {
@@ -91,6 +91,10 @@ userController.verifyUser = async (req, res, next) => {
     return next (error);
   }
 };
+
+
+
+
 
 userController.deleteAccount = async (req, res, next) => {}; //stretch
 
