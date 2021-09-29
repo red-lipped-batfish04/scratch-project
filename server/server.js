@@ -6,6 +6,9 @@ const db = require('./models/usersDatabaseModels.js');
 
 const loginRouter = require('./routes/loginRouter');
 const registerRouter = require('./routes/registerRouter');
+const habitsPageRouter = require('./routes/habitsPageRouter');
+const friendsPageRouter = require('./routes/friendsPageRouter');
+const videoRouter = require('./routes/videoRouter');
 
 // allow api for parsing json
 app.use(express.json());
@@ -19,6 +22,10 @@ app.use(express.static(__dirname + "../public"));
 
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/habits', habitsPageRouter);
+app.use('/friends', friendsPageRouter);
+app.use('/video', videoRouter);
+
 
 app.use((err, req, res, next) => {
   console.log(err);
