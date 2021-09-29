@@ -4,11 +4,12 @@
   "description": "Habit applications that encourages social accountability as well as self accountability through video recordings.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js",
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --history-api-fallback \" \"nodemon ./server/server.js\"",
+    "start": "NODE_ENV=production nodemon server/server.js",
+    "dev": "NODE_ENV=development webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production webpack --watch"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/red-lipped-batfish04/scratch-project.git"
@@ -21,23 +22,11 @@
   },
   "homepage": "https://github.com/red-lipped-batfish04/scratch-project#readme",
   "dependencies": {
-    "@chakra-ui/icons": "^1.0.15",
-    "@chakra-ui/react": "^1.6.8",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
-    "axios": "^0.21.4",
-    "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
     "dotenv-webpack": "^7.0.3",
     "express": "^4.17.1",
-    "framer-motion": "^4.1.17",
-    "jsonwebtoken": "^8.5.1",
     "mini-css-extract-plugin": "^2.3.0",
-    "pg": "^8.7.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-icons": "^4.2.0",
-    "react-router-dom": "^5.3.0"
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
