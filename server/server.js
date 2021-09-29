@@ -1,23 +1,37 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const cors = require('cors');
+const db = require('./models/usersDatabaseModels.js');
 
+const loginRouter = require('./routes/loginRouter');
+const registerRouter = require('./routes/registerRouter');
+const habitsPageRouter = require('./routes/habitsPageRouter');
+const friendsPageRouter = require('./routes/friendsPageRouter');
+const videoRouter = require('./routes/videoRouter');
+
+// allow api for parsing json
+app.use(express.json());
+app.use(cors());
+
+// allow api to receive data from client app
+// app.use(express.urlencoded());
+
+// express rendering of static imgs, etc.
 app.use(express.static(__dirname + "../public"));
 
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
+app.use('/habits', habitsPageRouter);
+app.use('/friends', friendsPageRouter);
+app.use('/video', videoRouter);
 
-app.get('/', (req, res) => {
-  return res.sendFile(path.resolve(__dirname, '../public/index.html'));
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(404).send('Internal Server Error');
 });
 
-
-// if (process.env.NODE_ENV !== 'development') {
-  // statically serve everything in the build folder on the route '/build'
-  // app.use('/', express.static(path.join(__dirname, '../build')));
-  // serve index.html on the route '/'
-  // app.get('/', (req, res) => {
-
-// });
-// }
 
 app.listen(3000); //listens on port 3000 -> http://localhost:3000/
 
