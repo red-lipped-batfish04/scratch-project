@@ -24,7 +24,7 @@ CREATE TABLE public.habits (
 
 CREATE TABLE public.users_habits_join (
 	"_id" serial NOT NULL,
-	"users_id" bigint NOT NULL,
+	"users_id" varchar NOT NULL,
 	"habits_id" varchar NOT NULL,
 	"habits_start_day" bigint NOT NULL,
 	"habit_frequency" bigint DEFAULT '1',
@@ -87,10 +87,6 @@ CREATE TABLE public.today (
 );
 
 
-
-
-ALTER TABLE public.habits ADD CONSTRAINT "habits_fk0" FOREIGN KEY ("name") REFERENCES ""("");
-
 ALTER TABLE public.users_habits_join ADD CONSTRAINT "users_habits_join_fk0" FOREIGN KEY ("users_id") REFERENCES "users"("email");
 ALTER TABLE public.users_habits_join ADD CONSTRAINT "users_habits_join_fk1" FOREIGN KEY ("habits_id") REFERENCES "habits"("name");
 
@@ -102,10 +98,3 @@ ALTER TABLE public.user_habit_calendar ADD CONSTRAINT "user_habit_calendar_fk0" 
 ALTER TABLE public.videos ADD CONSTRAINT "videos_fk0" FOREIGN KEY ("recorded_by_id") REFERENCES "users"("email");
 ALTER TABLE public.videos ADD CONSTRAINT "videos_fk1" FOREIGN KEY ("recorded_for_id") REFERENCES "users"("email");
 ALTER TABLE public.videos ADD CONSTRAINT "videos_fk2" FOREIGN KEY ("habits_id") REFERENCES "habits"("name");
-
-
-
-
-
-
-
