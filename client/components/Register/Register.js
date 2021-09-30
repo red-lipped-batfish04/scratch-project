@@ -137,7 +137,7 @@ const Register = (props) => {
 
 			{/* // end new component */}
 
-			<div>
+			{/* <div>
 				<h1>in React Register.js</h1>
 				<form>
 					<div className="register">
@@ -209,7 +209,7 @@ const Register = (props) => {
 						</button>
 					</div>
 				</form>
-			</div>
+			</div> */}
 		</>
 	);
 };
