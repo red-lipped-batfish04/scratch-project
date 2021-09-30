@@ -3,6 +3,8 @@ import { chakra, useColorModeValue } from "@chakra-ui/system";
 import React, { useState } from 'react';
 import { useHistory } from "react-router";
 import axios from 'axios'
+import ErrorMessage from "./ErrorMessage";
+import { CircularProgress } from "@chakra-ui/progress";
 
 export const EmailLoginForm = (props) => {
   function PasswordInput() {
@@ -18,6 +20,9 @@ export const EmailLoginForm = (props) => {
     password: '',
     success: null,
   })
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // handle typed inputs
   const handleChange = (e) => {
@@ -31,6 +36,7 @@ export const EmailLoginForm = (props) => {
   // post request for logging in
   const handleSubmitClick = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const payload = {
       "email" : state.email,
       "password" : state.password,
@@ -39,6 +45,7 @@ export const EmailLoginForm = (props) => {
     axios.post('http://localhost:3000/login', payload)
       .then((res) => {
         if (res.status === 200) {
+          setIsLoading(false);
           setState(prevState => ({
             ...prevState,
             'success' : 'Log in successful, redirecting to homepage...'
@@ -47,13 +54,19 @@ export const EmailLoginForm = (props) => {
           history.push('/habits')
         }
         else if (res.status === 204) {
+          setError('Invalid email or password');
+          setIsLoading(false);
           res.send('Email and password do not match')
         }
         else {
+          setError('Invalid email or password');
+          setIsLoading(false);
           res.status(404).send('Email does not exist')
         }
     })
     .catch(error => {
+      setIsLoading(false)
+      setError('Invalid email or password');
       console.log(error)
     });
   }
@@ -62,7 +75,9 @@ export const EmailLoginForm = (props) => {
   return (
 
     <chakra.form width="full" {...props}>
-      <FormControl>
+    <form>
+      {/* {error && <ErrorMessage message={error}/>} */}
+      <FormControl isRequired>
         <FormLabel
           fontWeight="medium"
           fontSize="sm"
@@ -105,6 +120,7 @@ export const EmailLoginForm = (props) => {
       >
         Login
 		</Button>
+    </form>
     </chakra.form>
   );
 };
