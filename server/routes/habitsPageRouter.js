@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
 router.get('/', (req, res, next) => {
   // first invoke controller to retrieve list of all habits at current date for current user: need habit name & completed_status
