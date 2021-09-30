@@ -9,6 +9,19 @@ router.get('/', (req, res, next) => {
 
 });
 
+
+router.post('/addHabit', helperController.getToday, userController.addHabit, (req, res, next) => {
+  // first invoke controller to write to DB info for new habit
+  // return confirmation
+  
+});
+
+router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
+  // first invoke contoller to update completed_today (toggle)
+  // use req.params.id to refer to the correct habit. id should === habit_id (habit name)
+  
+});
+
 router.get('/settings', (req, res, next) => { //stretch
   // first invoke middleware to retrieve all the user's account settings
   // return all user's current settings (so we can display their current selections)
@@ -20,16 +33,5 @@ router.put('/settings', (req, res, next) => { //stretch
   // return confirmation w new settings info to re-render page
 });
 
-router.post('/addHabit', helperController.getToday, userController.addHabit, (req, res, next) => {
-  // first invoke controller to write to DB info for new habit
-  // return confirmation
-
-});
-
-router.put('/completed/:id', (req, res, next) => {
-  // first invoke contoller to update completed_today (toggle)
-  // use req.params.id to refer to the correct habit. id should === habit_id (habit name)
-
-});
 
 module.exports = router;

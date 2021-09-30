@@ -10,7 +10,7 @@ router.post('/', userController.verifyUser, cookieController.createSession, (req
     return res.status(404).send('User not found');
   }
   console.log(res.locals)
-  return res.status(200).json(response);
+  return res.status(200).send();
 });
 
 module.exports = router;

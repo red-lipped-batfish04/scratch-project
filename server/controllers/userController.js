@@ -28,14 +28,12 @@ userController.createUser = async (req, res, next) => {
 
     // add user to database 
     const addUserQuery = `INSERT INTO users (name, email, password, phone_number, timezone, darkmode_setting)
-    VALUES ($1, $2, $3, $4, $5, $6) 
-    RETURNING _id;`;
+    VALUES ($1, $2, $3, $4, $5, $6);`;
     const values = [ name, email, crypt_password, phoneNumber, time, true ];
-    const addedUserID = await db.query(addUserQuery, values);
+    const addedUser = await db.query(addUserQuery, values);
     
     // store user in res.locals
     res.locals.user = { name: name, email: email };
-    res.locals._id = addedUserID.rows[0]._id;
     res.locals.registrationStatus = true;
     return next();
   }
@@ -52,7 +50,7 @@ userController.verifyUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     // database query to find user
-    const findUserQuery = `SELECT password, _id, name
+    const findUserQuery = `SELECT password, name
     FROM users WHERE email = $1;`;
     const value = [email] ;
     const returnedQuery = await db.query(findUserQuery, value);
@@ -66,7 +64,6 @@ userController.verifyUser = async (req, res, next) => {
 
     // take returned hashed password from query and compare to entered password from login req.body 
     const hashedPassword = returnedQuery.rows[0].password;
-    const userID = returnedQuery.rows[0]._id;
     const verify = await bcrypt.compare(password, hashedPassword);
   
     // if verification is false, redirect to login page
@@ -76,7 +73,6 @@ userController.verifyUser = async (req, res, next) => {
     }
   
     else {
-      res.locals._id = userID;
       res.locals.user = {
         name: returnedQuery.rows[0]['name'],
         email: returnedQuery.rows[0]['email'],
@@ -136,9 +132,11 @@ userController.getAllUsers = async(req, res, next) => {
 
 
 userController.setOneHabitStatus = async (req, res, next) => {
-  const{ completeToday } = req.body;
-  const statusQuery = 'UPDATE user_habits_join SET completed_today = $1'; //what is the default value? false/uncompleted?
-      const status = await db.query(statusQuery,[completeToday]).rows[0];
+  const{ completedToday } = req.body;
+  const statusQuery = 'UPDATE user_habits_join SET completed_today = $1'; 
+  //########## need to fix this query: update user_habits_join where habit_id === req.params.id & user_id === req.cookies.email, set completed_today = $1
+  // completed_today defaults to false
+      const status = await db.query(statusQuery,[completedToday]).rows[0];
   //client will click a status button which value is boolean;
   res.locals.habitStatus = status;
   return next();
