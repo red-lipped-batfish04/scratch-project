@@ -1,11 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/userController');
 
-router.get('/', (req, res, next) => {
+router.get('/',userController.getMyHabits, (req, res, next) => {
   // first invoke controller to retrieve list of all habits at current date for current user: need habit name & completed_status
   // return list
+  const user=res.locals.user;
+  const myHabits=res.locals.myHabits;
+  console.log('myHabits',myHabits);
+  
+  if (myHabits) {
+    
+    return res.status(200).json(myHabits);
+  }else{
+    return res.json('err in get habits in server.js');
+  }
+ 
+
 
 });
+  
 
 router.get('/settings', (req, res, next) => {
   // first invoke middleware to retrieve all the user's account settings

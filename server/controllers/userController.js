@@ -111,9 +111,10 @@ userController.addHabit = async (req, res, next) => {
   } catch (getQueryError) {
     return next({'err': getQueryError, message: 'getHabit query failed in userController.addHabit'})
   }
-  const userHabitJoinQuery = '';
+  const userHabitJoinQuery = 'INSERT INTO users_habits_join VALUES $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12';
   try {
     db.query(userHabitJoinQuery, [])
+    return next()
   } catch (setUserHabitJoinError) {
     return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
   }
@@ -180,6 +181,33 @@ userController.sendVideo = async (req, res, next) => {
 
 
   // return res.json(uploads);
+};
+
+userController.getMyHabits = async (req, res, next) => {
+  //in verifyUser, res.locals.user = {name: name, email: email}. 
+  //const user=res.locals.user;
+  //const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${user.email}`;
+  const alan = 'alan@gmail.com';
+  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+  const myHabits = await db.query(getMyHabitsQuery,[]);
+  console.log('myHabits >>>',myHabits);
+  res.locals.myHabits = myHabits.rows;
+  return next();
+};
+
+
+userController.myTodayGoals = async (req, res, next) => {
+ //in getMyHabits, res.locals.myHabits = myHabits.rows;
+ const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
+ const todayGoals = [];
+ myHabits.forEach(obj=>{
+   if(!obj.completed_today) todayGoals.push(obj.habits_id);
+ })
+
+ res.locals.todayGoals = todayGoals;
+ return next();
+
+  
 };
 
 userController.deleteVideo = async (req, res, next) => {}; //stretch
