@@ -101,9 +101,9 @@ userController.deleteAccount = async (req, res, next) => {}; //stretch
 
 userController.addHabit = async (req, res, next) => {
   const { habitName } = req.body;
-  const getHabitQuery = 'SELECT name FROM habits WHERE name = $1' //TODO: query string to check habits table for habitName
+  const getHabitQuery = 'SELECT name FROM habits WHERE name = $1' //query string to check habits table for habitName
   try {
-    const habitExists = await db.query(getHabitQuery, [habitName]).rows[0] === 'habitQuery'; //WHAT IS THE RETURNED DATA TYPE??
+    const habitExists = await db.query(getHabitQuery, [habitName]).rows[0] === 'habitQuery'; //WHAT IS THE RETURNED DATA TYPE?? ####THIS MAY BE BROKEN
     if (!habitExists) {
       const setHabitQuery = 'INSERT INTO habits (name) VALUES $1';
       try {
@@ -115,9 +115,10 @@ userController.addHabit = async (req, res, next) => {
   } catch (getQueryError) {
     return next({'err': getQueryError, message: 'getHabit query failed in userController.addHabit'})
   }
-  const userHabitJoinQuery = '';
+  const userHabitJoinQuery = 'INSERT INTO users_habits_join VALUES $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12';  
   try {
-    db.query(userHabitJoinQuery, [])
+    db.query(userHabitJoinQuery, [req.cookies.email, habitName, res.locals.today, req.body.habit_frequency, ]) // userId is standin for the current logged in user's email (change to whatever variable name is used when this is set in createSession)
+    next();
   } catch (setUserHabitJoinError) {
     return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
   }
