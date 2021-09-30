@@ -185,9 +185,11 @@ userController.sendVideo = async (req, res, next) => {
 
 userController.getMyHabits = async (req, res, next) => {
   //in verifyUser, res.locals.user = {name: name, email: email}. 
-  const user=res.locals.user;
-  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE users_id = `${user.email}`';
-  const myHabits = db.query(getMyHabitsQuery,[]);
+  //const user=res.locals.user;
+  //const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${user.email}`;
+  const alan = 'alan@gmail.com';
+  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+  const myHabits = await db.query(getMyHabitsQuery,[]);
   console.log('myHabits >>>',myHabits);
   res.locals.myHabits = myHabits.rows;
   return next();
@@ -203,7 +205,7 @@ userController.myTodayGoals = async (req, res, next) => {
  })
 
  res.locals.todayGoals = todayGoals;
- return nexy();
+ return next();
 
   
 };
