@@ -28,8 +28,7 @@ userController.createUser = async (req, res, next) => {
 
     // add user to database 
     const addUserQuery = `INSERT INTO users (name, email, password, phone_number, timezone, darkmode_setting)
-    VALUES ($1, $2, $3, $4, $5, $6) 
-    RETURNING _id;`;
+    VALUES ($1, $2, $3, $4, $5, $6);`;
     const values = [ name, email, crypt_password, phoneNumber, time, true ];
     const addedUserID = await db.query(addUserQuery, values);
     
