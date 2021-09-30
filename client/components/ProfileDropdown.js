@@ -59,7 +59,10 @@ export const ProfileDropdown = () => (
 				</Box>
 			</HStack>
 			<MenuItem fontWeight="medium">Account Settings</MenuItem>
-			<MenuItem fontWeight="medium" color={mode("red.500", "red.300")}>
+			<MenuItem fontWeight="medium" color={mode("red.500", "red.300")} onClick={() => {
+				localStorage.clear();
+				window.location = '/'
+			}}>
 				Sign out
 			</MenuItem>
 		</MenuList>

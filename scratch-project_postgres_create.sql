@@ -1,11 +1,11 @@
 CREATE TABLE public.users (
-	"_id" serial NOT NULL,
 	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
 	"phone_number" varchar,
 	"timezone" timestamptz NOT NULL,
 	"darkmode_setting" BOOLEAN NOT NULL DEFAULT 'true',
+  "profile_pic_filename" varchar,
 	CONSTRAINT "users_pk" PRIMARY KEY ("email")
 ) WITH (
   OIDS=FALSE
@@ -31,9 +31,10 @@ CREATE TABLE public.users_habits_join (
 	"days_missed_until_reminder" bigint DEFAULT '2',
 	"days_missed" bigint DEFAULT '0',
 	"days_since_missed" bigint DEFAULT '0',
-	"total_days" bigint DEFAULT '0',
-	"benchmark" bigint NOT NULL,
-	"private_habit" BOOLEAN DEFAULT 'false',
+	"total_days_achieved" bigint DEFAULT '0',
+	"benchmark" bigint,
+  "completed_today" BOOLEAN NOT NULL DEFAULT 'false',
+	"habit_is_private" BOOLEAN DEFAULT 'false',
 	"text_notifications_setting" BOOLEAN DEFAULT 'true',
 	"push_notifications_setting" BOOLEAN DEFAULT 'true',
 	CONSTRAINT "users_habits_join_pk" PRIMARY KEY ("_id")
@@ -58,8 +59,7 @@ CREATE TABLE public.friends (
 CREATE TABLE public.user_habit_calendar (
 	"_id" serial NOT NULL,
 	"user_habits_join_id" bigint NOT NULL,
-	"day_since_launch" bigint NOT NULL,
-	"complete_today" BOOLEAN NOT NULL DEFAULT 'false',
+	"days_since_launch" bigint NOT NULL,
 	CONSTRAINT "user_habit_calendar_pk" PRIMARY KEY ("_id")
 ) WITH (
   OIDS=FALSE
@@ -68,13 +68,20 @@ CREATE TABLE public.user_habit_calendar (
 
 
 CREATE TABLE public.videos (
-	"_id" bigint NOT NULL,
 	"recorded_by_id" varchar NOT NULL,
 	"recorded_for_id" varchar,
 	"filename" varchar NOT NULL,
 	"send_when" varchar DEFAULT 'slacking',
+  "watched" boolean DEFAULT 'false',
 	"habits_id" varchar NOT NULL,
-	CONSTRAINT "videos_pk" PRIMARY KEY ("_id")
+	CONSTRAINT "videos_pk" PRIMARY KEY ("filename")
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE public.today (
+	"today" bigint DEFAULT 0,
+	CONSTRAINT "today_pk" PRIMARY KEY ("today")
 ) WITH (
   OIDS=FALSE
 );

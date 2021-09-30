@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ChakraProvider } from "@chakra-ui/react";
 import HomePage from './components/HomePage'
-import Login from './components/Login'
-import Register from './components/Register';
+import Login from './components/Login/Login'
+import Register from './components/Register/Register';
 import HabitDashboard from './components/HabitDashboard';
 import Friends from './components/Friends';
 
