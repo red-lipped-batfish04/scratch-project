@@ -17,9 +17,7 @@ router.post('/addHabit', helperController.getToday, userController.addHabit, (re
 });
 
 router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
-  // first invoke contoller to update completed_today (toggle)
-  // use req.params.id to refer to the correct habit. id should === habit_id (habit name)
-  
+  res.status(200).send(res.locals.habitStatus);
 });
 
 router.get('/settings', (req, res, next) => { //stretch

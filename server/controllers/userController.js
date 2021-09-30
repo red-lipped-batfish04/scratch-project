@@ -133,13 +133,18 @@ userController.getAllUsers = async(req, res, next) => {
 
 userController.setOneHabitStatus = async (req, res, next) => {
   const{ completedToday } = req.body;
+  // use req.params.id to refer to the correct habit. id should === habit_id (habit name)
   const statusQuery = 'UPDATE user_habits_join SET completed_today = $1'; 
   //########## need to fix this query: update user_habits_join where habit_id === req.params.id & user_id === req.cookies.email, set completed_today = $1
   // completed_today defaults to false
-      const status = await db.query(statusQuery,[completedToday]).rows[0];
-  //client will click a status button which value is boolean;
-  res.locals.habitStatus = status;
-  return next();
+  try {
+    const status = await db.query(statusQuery,[completedToday]).rows[0]['completed_today'];
+    //client will click a status button which value is boolean;
+    res.locals.habitStatus = status;
+    return next();
+  } catch (err) {
+    return next({'err': err, message: 'query failed in userController.setOneHabitStatus'});
+  }
 };
 
 userController.resetAllHabitStatus = async (req, res, next) => {
