@@ -124,12 +124,67 @@ userController.addHabit = async (req, res, next) => {
   
 };
 
-userController.setOneHabitStatus = async (req, res, next) => {};
+userController.getAllUsers = async(req, res, next) => {
+  const getAllUsersQuery = 'SELECT name FROM users'; 
+  const allUsers = await db.query(getAllUsersQuery,[])
+  console.log('allusers >>>>',allUsers)
+  res.locals.allUsers = allUsers.rows;
+  return next();
 
-userController.resetAllHabitStatus = async (req, res, next) => {};
+}
 
 
-userController.saveVideo = async (req, res, next) => {};
+userController.setOneHabitStatus = async (req, res, next) => {
+  const{ completeToday } = req.body;
+  const statusQuery = 'UPDATE user_habits_join SET completed_today = $1'; //what is the default value? false/uncompleted?
+      const status = await db.query(statusQuery,[completeToday]).rows[0];
+  //client will click a status button which value is boolean;
+  res.locals.habitStatus = status;
+  return next();
+};
+
+userController.resetAllHabitStatus = async (req, res, next) => {
+  const current =  new Date().toLocaleString();
+  const currentDate = new Date().toLocaleDateString();
+  let endOfDay = currentDate + ", " + "11:59:59 PM";
+  const resetStatusQuery = 'UPDATE user_habits_join SET completed_today = false';
+  if(current === endOfDay){
+    await db.query(resetStatusQuery);
+  }
+  return next();
+};
+
+//when frontend save video, use habit to name the video file.
+//send the video name to backend to store the file in local.
+// userController.saveVideo = async (req, res, next) => {
+//   const {videoFile} = req.body;
+//   const saveVideoQuery = 'INSERT INTO videos (filename) VALUES = $1';
+//   const saveVideo = await db.query(saveVideoQuery,[videoFile]).rows[0];
+//   // store all videos' path/name ['running','reading','coding]
+//   const videoFolder = [];
+//   //upload file to local
+//   //need to confirm the uploaded video file path.
+//   file.mv(`${__dirname}/public/uploads/${saveVideo}`, (err) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).send(err);
+//     }
+//    });
+//    videoFolder.push(saveVideo);
+//   res.locals.videoFolder = videoFolder;
+//   res.locals.video = saveVideo;
+//   return next();
+// };
+
+userController.sendVideo = async (req, res, next) => {
+  //need to confirm the file paths
+  //const uploads = fs.readdirSync('./public/uploads')//return array
+  
+  
+
+
+  // return res.json(uploads);
+};
 
 userController.deleteVideo = async (req, res, next) => {}; //stretch
 
@@ -149,4 +204,3 @@ userController.changeTextNotificationSetting = async (req, res, next) => {}; //s
 
 
 module.exports = userController;
-
