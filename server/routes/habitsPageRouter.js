@@ -2,22 +2,25 @@ const express = require('express');
 const router = express.Router();
 import { userController } from '../controllers/userController.js';
 import { helperController } from '../controllers/helperController.js';
+import { videoController } from '../controllers/videoController.js';
 
-router.get('/', (req, res, next) => {
-  // first invoke controller to retrieve list of all habits at current date for current user: need habit name & completed_status
+router.get('/', userController.getMyHabits, userController.myTodayGoals, userController.checkProgress, (req, res, next) => {
+  // first invoke controller to retrieve list of all habits at current date for current user
   // return list
-
+  const user=res.locals.user;
+  const myHabits=res.locals.myHabits;
+  console.log('myHabits',myHabits);
+  return res.status(200).json(myHabits);
 });
-
-
-router.post('/addHabit', helperController.getToday, userController.addHabit, (req, res, next) => {
-  // first invoke controller to write to DB info for new habit
-  // return confirmation
   
+router.post('/addHabit', helperController.getToday, userController.addHabit, userController.getMyHabits, userController.myTodayGoals, (req, res, next) => {
+  // first invoke controller to write to DB info for new habit
+  // return updated list of today's goals
+  return res.status(200).json(res.locals.myHabits);
 });
 
 router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
-  res.status(200).send(res.locals.habitStatus);
+  return res.status(200).send(res.locals.habitStatus);
 });
 
 router.get('/settings', (req, res, next) => { //stretch

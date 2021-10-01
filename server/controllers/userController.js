@@ -37,7 +37,6 @@ userController.createUser = async (req, res, next) => {
     res.locals.registrationStatus = true;
     return next();
   }
-
   catch (error) {
     return res.redirect('/login');
   }
@@ -111,14 +110,15 @@ userController.addHabit = async (req, res, next) => {
   } catch (getQueryError) {
     return next({'err': getQueryError, message: 'getHabit query failed in userController.addHabit'})
   }
-  const userHabitJoinQuery = 'INSERT INTO users_habits_join VALUES $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12';  
+
+  const userHabitJoinQuery = 'INSERT INTO users_habits_join (users_id, habits_id, habit_start_day, habit_frequency) VALUES $1, $2, $3, $4'; // is it ok to leave the rest of these blank? my hope is that they will default to their default values
   try {
-    db.query(userHabitJoinQuery, [req.cookies.email, habitName, res.locals.today, req.body.habit_frequency, ]) // userId is standin for the current logged in user's email (change to whatever variable name is used when this is set in createSession)
+    db.query(userHabitJoinQuery, [req.cookies.email, habitName, res.locals.today, req.body.habit_frequency])
     next();
-  } catch (setUserHabitJoinError) {
-    return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
   }
-  
+  catch (setUserHabitJoinError) {
+      return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
+  }
 };
 
 userController.getAllUsers = async(req, res, next) => {
@@ -158,40 +158,43 @@ userController.resetAllHabitStatus = async (req, res, next) => {
   return next();
 };
 
-//when frontend save video, use habit to name the video file.
-//send the video name to backend to store the file in local.
-// userController.saveVideo = async (req, res, next) => {
-//   const {videoFile} = req.body;
-//   const saveVideoQuery = 'INSERT INTO videos (filename) VALUES = $1';
-//   const saveVideo = await db.query(saveVideoQuery,[videoFile]).rows[0];
-//   // store all videos' path/name ['running','reading','coding]
-//   const videoFolder = [];
-//   //upload file to local
-//   //need to confirm the uploaded video file path.
-//   file.mv(`${__dirname}/public/uploads/${saveVideo}`, (err) => {
-//     if (err) {
-//       console.error(err);
-//       return res.status(500).send(err);
-//     }
-//    });
-//    videoFolder.push(saveVideo);
-//   res.locals.videoFolder = videoFolder;
-//   res.locals.video = saveVideo;
-//   return next();
-// };
-
-userController.sendVideo = async (req, res, next) => {
-  //need to confirm the file paths
-  //const uploads = fs.readdirSync('./public/uploads')//return array
-  
-  
-
-
-  // return res.json(uploads);
+userController.getMyHabits = async (req, res, next) => {
+  //in verifyUser, res.locals.user = {name: name, email: email}. 
+  //const user=res.locals.user;
+  //const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${user.email}`;
+  const alan = 'alan@gmail.com';
+  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+  try {
+    const myHabits = await db.query(getMyHabitsQuery,[]);
+    console.log('myHabits >>>',myHabits);
+    res.locals.myHabits = myHabits.rows;
+    return next();
+  } catch (err) {
+    return next({'err': err, message: 'query failed in userController.getMyHabits'});
+  }
 };
 
-userController.deleteVideo = async (req, res, next) => {}; //stretch
 
+userController.myTodayGoals = async (req, res, next) => {
+ //in getMyHabits, res.locals.myHabits = myHabits.rows;
+ const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
+ const todayGoals = [];
+ myHabits.forEach(obj=>{
+   if(!obj.completed_today) todayGoals.push(obj.habits_id);
+ }) // ########################### this is testing for the wrong thing. right now it's only returning today's goals that are not completed. we want to return all of today's goals. this will require a query to the database. 
+  //retrieve list of habit names & completed_today values from user_habits_join corresponding to current users_id, that have a users_habits_join_id in the user_habit_calendar on the current day (How this query works: first find all entries in user_habit_calendar where days_since_launch = today. Also find all users_habits_join entries with users_id of current user. Then filter the list from user_habit_calendar further to only include entries with users_habits_join_id’s that occur on the list from users_habits_join. )
+
+
+ res.locals.todayGoals = todayGoals;
+ return next(); 
+};
+
+userController.checkProgress = async (req, res, next) => {
+  // - for each entry in the res.locals.todayGoals, compare its days_missed value with its days_missed_until_reminder value. if they equal each other for any of the entries, redirect to GET /video
+  // EXCEPT, we can't just redirect because we need habitsPageRouter get '/' to finish & return its list of today's habits... so how can we handle this?
+  // can we open a new request from here without interrupting the current request?
+  // or, do we send back a confirmation to the client that it's time to display video, upon recieving which the client makes a new get request to /video?
+}
 
 userController.makeFriendRequest = async (req, res, next) => {};
 
