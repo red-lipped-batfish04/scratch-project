@@ -6,7 +6,6 @@ const userController = require('../controllers/userController');
 
 router.get('/', userController.getAllUsers,(req, res) => {
   const allUsers = res.locals.allUsers;
-  console.log('friends in server>>>',allUsers);
   if (allUsers) {
     
     return res.status(200).json(allUsers);

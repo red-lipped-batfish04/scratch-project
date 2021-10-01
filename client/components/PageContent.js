@@ -1,5 +1,6 @@
 import { Box, Container, useColorModeValue } from "@chakra-ui/react";
 import * as React from "react";
+import HabitList from './HabitList/HabitList'
 
 export const PageContent = (props) => (
 	<Box as="main" py="8" flex="1" {...props}>
@@ -10,12 +11,7 @@ export const PageContent = (props) => (
 				rounded="lg"
 				shadow="base"
 			>
-				<Box
-					border="3px dashed currentColor"
-					color={useColorModeValue("gray.200", "gray.600")}
-					h="96"
-					rounded="lg"
-				/>
+				<HabitList />
 			</Box>
 		</Container>
 	</Box>

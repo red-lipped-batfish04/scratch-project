@@ -3,12 +3,13 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const db = require('./models/usersDatabaseModels.js');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const cron = require('node-cron');
 
 const loginRouter = require('./routes/loginRouter');
 const registerRouter = require('./routes/registerRouter');
 const friendsPageRouter = require('./routes/friendsPageRouter');
-// const habitsPageRouter = require('./routes/habitsPageRouter');
+const habitsPageRouter = require('./routes/habitsPageRouter');
 // const videoRouter = require('./routes/videoRouter');
 
 // allow api for parsing json
@@ -24,7 +25,7 @@ app.use(express.static(__dirname + "../public"));
 
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
-// app.use('/habits', habitsPageRouter);
+app.use('/habits', habitsPageRouter);
 app.use('/friends', friendsPageRouter);
 // app.use('/video', videoRouter);
 

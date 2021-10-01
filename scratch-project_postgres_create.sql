@@ -87,7 +87,7 @@ CREATE TABLE public.today (
 );
 
 
-ALTER TABLE public.users_habits_join ADD CONSTRAINT "users_habits_join_fk0" FOREIGN KEY ("users_id") REFERENCES "users"("email");
+ALTER TABLE public.users_habits_join ADD CONSTRAINT "users_habits_join_fk0" FOREIGN KEY ("users_id") REFERENCES "users"(email);
 ALTER TABLE public.users_habits_join ADD CONSTRAINT "users_habits_join_fk1" FOREIGN KEY ("habits_id") REFERENCES "habits"("name");
 
 ALTER TABLE public.friends ADD CONSTRAINT "friends_fk0" FOREIGN KEY ("friend_a") REFERENCES "users"("email");
