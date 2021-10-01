@@ -71,15 +71,15 @@ router.get('/', userController.getMyHabits,  (req, res, next) => {
   return res.status(200).json(myHabits);
 });
   
-router.post('/addHabit', helperController.getToday, userController.addHabit, userController.getMyHabits, userController.myTodayGoals, (req, res, next) => {
-  // first invoke controller to write to DB info for new habit
-  // return updated list of today's goals
-  return res.status(200).json(res.locals.myHabits);
-});
+// router.post('/addHabit', helperController.getToday, userController.addHabit, userController.getMyHabits, userController.myTodayGoals, (req, res, next) => {
+//   // first invoke controller to write to DB info for new habit
+//   // return updated list of today's goals
+//   return res.status(200).json(res.locals.myHabits);
+// });
 
-router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
-  return res.status(200).send(res.locals.habitStatus);
-});
+// router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
+//   return res.status(200).send(res.locals.habitStatus);
+// });
 
 router.get('/settings', (req, res, next) => { //stretch
   // first invoke middleware to retrieve all the user's account settings

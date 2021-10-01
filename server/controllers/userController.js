@@ -374,8 +374,8 @@ userController.resetAllHabitStatus = async (req, res, next) => {
 
 userController.getMyHabits = async (req, res, next) => {
   //in verifyUser, res.locals.user = {name: name, email: email}. 
-  //const user=res.locals.user;
-  //const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${user.email}`;
+  // const email = req.cookies.email;  
+  // const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
   const alan = 'alan@gmail.com';
   const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
   try {
