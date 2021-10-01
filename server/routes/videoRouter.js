@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-import { videoController } from '../controllers/videoController.js';
+// import { videoController } from '../controllers/videoController.js';
+const videoController = require('../controllers/videoController.js');
 
 
 router.get('/', (req, res, next) => {
