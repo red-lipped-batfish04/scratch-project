@@ -4,9 +4,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import HomePage from './components/HomePage'
 import Login from './components/Login/Login'
 import Register from './components/Register/Register';
-//import HabitDashboard from './components/HabitDashboard';
+import HabitDashboard from './components/HabitDashboard';
 import Friends from './components/Friends';
-import HabitDashboard from './components/HabitList/HabitList';
+//import HabitDashboard from './components/HabitList/HabitList';
+import AddHabit from './components/AddHabit';
 
 
 
@@ -26,6 +27,9 @@ const App = () => {
 				</Route>
 				<Route path="/habits" exact>
 					<HabitDashboard />
+				</Route>
+				<Route path="/addhabit">
+					<AddHabit />
 				</Route>
 				<Route path="/friends" exact>
 					<Friends />

@@ -32,9 +32,11 @@ router.put('/settings', (req, res, next) => {
   // return confirmation w new settings info to re-render page
 });
 
-router.post('/addHabit', (req, res, next) => {
+router.post('/addHabit', userController.addHabit,(req, res, next) => {
   // first invoke controller to write to DB info for new habit
   // return confirmation
+  const habitName = res.locals.habitNameAdded;
+  res.status(200).json(habitName);
 
 });
 

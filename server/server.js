@@ -10,6 +10,7 @@ const registerRouter = require('./routes/registerRouter');
 const habitsPageRouter = require('./routes/habitsPageRouter');
 const friendsPageRouter = require('./routes/friendsPageRouter');
 const videoRouter = require('./routes/videoRouter');
+//const AddHabit  = require('../client/components/AddHabit.js');
 
 // allow api for parsing json
 app.use(express.json());
@@ -26,6 +27,7 @@ app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/habits', habitsPageRouter);
 app.use('/friends', friendsPageRouter);
+//app.use('/addhabit',AddHabit);
 // app.use('/video', videoRouter);
 
 

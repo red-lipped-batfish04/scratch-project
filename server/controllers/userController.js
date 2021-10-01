@@ -103,7 +103,8 @@ userController.addHabit = async (req, res, next) => {
     if (!habitExists) {
       const setHabitQuery = 'INSERT INTO habits (name) VALUES $1';
       try {
-        await db.query(setHabitQuery, [habitName]);
+        const habitNameAdded = await db.query(setHabitQuery, [habitName]);
+        res.locals.habitNameAdded = habitNameAdded;
       } catch (setQueryError) {
         return next({'err': setQueryError, message: 'setHabit query failed in userController.addHabit'})
       }
