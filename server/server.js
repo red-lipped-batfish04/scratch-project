@@ -8,13 +8,13 @@ const cron = require('node-cron');
 
 const loginRouter = require('./routes/loginRouter');
 const registerRouter = require('./routes/registerRouter');
-const habitsPageRouter = require('./routes/habitsPageRouter');
 const friendsPageRouter = require('./routes/friendsPageRouter');
-const videoRouter = require('./routes/videoRouter');
+const habitsPageRouter = require('./routes/habitsPageRouter');
+// const videoRouter = require('./routes/videoRouter');
 
 // allow api for parsing json
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:8080" }));
 app.use(cookieParser());
 
 // allow api to receive data from client app

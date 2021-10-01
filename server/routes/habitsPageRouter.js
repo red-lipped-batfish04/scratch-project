@@ -1,20 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController.js');
-// import { userController } from '../controllers/userController.js';
-const helperController = require('../controllers/helperController.js');
-// import { helperController } from '../controllers/helperController.js';
-const videoController = require('../controllers/videoController.js');
-// import { videoController } from '../controllers/videoController.js';
+const userController = require('../controllers/userController');
+const cookieController = require('../controllers/cookieController')
+const helperController = require('../controllers/helperController');
+// const videoController = require('../controllers/videoController.js');
 
 
-
-router.get('/', userController.getMyHabits, userController.myTodayGoals, userController.checkProgress, (req, res, next) => {
+router.get('/', cookieController.verifyToken, userController.getMyHabits, userController.myTodayGoals, userController.checkProgress, (req, res, next) => {
   // first invoke controller to retrieve list of all habits at current date for current user
   // return list
   const user=res.locals.user;
   const myHabits=res.locals.myHabits;
-  console.log('myHabits',myHabits);
   return res.status(200).json(myHabits);
 });
   
