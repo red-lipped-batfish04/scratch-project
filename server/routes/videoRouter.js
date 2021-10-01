@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+// import { videoController } from '../controllers/videoController.js';
+const videoController = require('../controllers/videoController.js');
+
 
 router.get('/', (req, res, next) => {
   // invoke controller to retrieve video of specified name (only if recorded_for_id matches current user ID)
