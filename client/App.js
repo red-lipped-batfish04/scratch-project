@@ -26,9 +26,9 @@ const App = () => {
 				<Route path="/habits" exact>
 					<HabitDashboard />
 				</Route>
-				<Route path="/addhabit">
+				{/* <Route path="/addhabit">
 					<AddHabit />
-				</Route>
+				</Route> */}
 				<Route path="/friends" exact>
 					<Friends />
 				</Route>

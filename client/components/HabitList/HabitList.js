@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 export const HabitList = () => {
   // all of the elements in this array must be unqiue or it causes an issue on rendering that creates extra list items
   const initialItems = ["blue.200", "green.200", "blue.400", "green.400", "blue.500"];
-  const [todayGoals, setTodayGoals] = useState(['one more']);
+  const [todayGoals, setTodayGoals] = useState([]);
     
    
 	const { items, handlePositionUpdate, measurePosition } = useDraggableList(
@@ -45,7 +45,7 @@ export const HabitList = () => {
   const renderGoals = (goalsArr)=> {
 		let goal;
 		let i = -1;
-		return items.map(goal => {
+		return goalsArr.map(goal => {
 			goal = goalsArr[i] 
       console.log('goal',goal)
       i++
@@ -96,7 +96,8 @@ export const HabitList = () => {
 
 
 	return (
-		<>
+		<> 
+		
 		{/* <Box as="section">
 			<Box maxWidth='600px' mx="auto">
 				<Stack as="ul" spacing="4">

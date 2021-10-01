@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ChakraProvider} from "@chakra-ui/react";
-import { Box,Badge,Avatar,Button } from "@chakra-ui/react";
-import axios from 'axios';
+import { Box,Avatar,Button } from "@chakra-ui/react";
+
 
 const AllUsers = (props) => { 
 
@@ -106,17 +106,21 @@ const AllUsers = (props) => {
     }
     
       return (
+     
           
         
        <div>
        
        
         {renderUsers(allUsers)}
-        </div>
+       </div>
         
        
       
        
+       
+      
+    
       )
 
 };

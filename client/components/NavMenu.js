@@ -25,7 +25,7 @@ const MobileNavMenu = (props) => {
 		>
 			<Box px="4">
 				<NavItem.Mobile active label="Goal Board" />
-				<NavItem.Mobile label="Friends" />
+				<NavItem.Mobile label="Friends" /> 
 				<NavItem.Mobile label="Tribes" />
 				<NavItem.Mobile label="Results" />
 			</Box>
