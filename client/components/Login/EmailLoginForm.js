@@ -42,7 +42,7 @@ export const EmailLoginForm = (props) => {
       "password" : state.password,
     }
 
-    axios.post('http://localhost:3000/login', payload)
+    axios.post('http://localhost:3000/login', payload, {withCredentials: true})
       .then((res) => {
         if (res.status === 200) {
           setIsLoading(false);
