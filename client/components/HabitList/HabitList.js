@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 export const HabitList = () => {
   // all of the elements in this array must be unqiue or it causes an issue on rendering that creates extra list items
   const initialItems = ["blue.200", "green.200", "blue.400", "green.400", "blue.500"];
-  const [todayGoals, setTodayGoals] = useState([' one more']);
+  const [todayGoals, setTodayGoals] = useState(['one more']);
     
    
 	const { items, handlePositionUpdate, measurePosition } = useDraggableList(
@@ -19,45 +19,42 @@ export const HabitList = () => {
   
 
 	useEffect(() => {
-        console.log('in useEffect');
-        fetch('http://localhost:3000/habits',{headers : { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            }
-           })
-          .then(response => response.json()) //[{name:aa},{name:bb}]
-          .then(result => {
-             console.log('result from backend',result);
-             const todayGoalsFolder = ['test1 ','test2'];
-             console.log('folder in useEffect >>',todayGoalsFolder);
-            result.forEach(obj=>{
+    console.log('in useEffect');
+    fetch('http://localhost:3000/habits',{headers : { 
+    	'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    	}
+    })
+      .then(response => response.json()) //[{name:aa},{name:bb}]
+      .then(result => {
+        console.log('result from backend',result);
+        const todayGoalsFolder = ['test1 ','test2'];
+        console.log('folder in useEffect >>',todayGoalsFolder);
+        result.forEach(obj => {
 				 //if(!obj.completed_today)
-                todayGoalsFolder.push(obj.habits_id);
-            })
+          todayGoalsFolder.push(obj.habits_id);
+        })
+				console.log('folder in useEffect >>',todayGoalsFolder);
+				setTodayGoals(todayGoalsFolder);
             
-            console.log('folder in useEffect >>',todayGoalsFolder);
-    
-            setTodayGoals(todayGoalsFolder);
-            
-          });
-      },['test1']);
+      });
+  }, ['test1']);
 	    
-	  console.log('todayGoals',todayGoals);
+	console.log('todayGoals',todayGoals);
 
-      const renderGoals = (goalsArr)=>{
-		  let goal;
-		  let i = -1;
-		return items.map(goal=>{
-			goal=goalsArr[i] 
-           console.log('goal',goal)
-           i++
+  const renderGoals = (goalsArr)=> {
+		let goal;
+		let i = -1;
+		return items.map(goal => {
+			goal = goalsArr[i] 
+      console.log('goal',goal)
+      i++
 		   
-
-		return(
+		return (
 			<Box as="section">
-			<Box maxWidth='600px' mx="auto">
-				<Stack as="ul" spacing="4">
-			<DraggableListItem
+				<Box maxWidth='600px' mx="auto">
+					<Stack as="ul" spacing="4">
+						<DraggableListItem
 							key={goal}
 							index={i}
 							whileHover={{
@@ -67,22 +64,22 @@ export const HabitList = () => {
 								cursor: "grabbing",
 								scale: 1.12,
 							}}
-							height="16"
-							bg={goal}
-							borderRadius="lg"
-							boxShadow="md"
-							position="relative"
-							onPositionUpdate={handlePositionUpdate}
-              measurePosition={measurePosition}
-            ><Flex
-                mt={1}
-                justifyContent="center"
-                fontWeight="extrabold"
-                fontSize="xl"
-              > {todayGoals[i]}
-			  
-              </Flex>
-            </DraggableListItem>
+										height="16"
+										bg={goal}
+										borderRadius="lg"
+										boxShadow="md"
+										position="relative"
+										onPositionUpdate={handlePositionUpdate}
+										measurePosition={measurePosition}
+									><Flex
+											mt={1}
+											justifyContent="center"
+											fontWeight="extrabold"
+											fontSize="xl"
+										> {todayGoals[i]}
+							
+										</Flex>
+									</DraggableListItem>
 			
 		</Stack>
 			</Box>

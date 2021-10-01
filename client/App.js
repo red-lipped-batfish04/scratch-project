@@ -6,8 +6,6 @@ import Login from './components/Login/Login'
 import Register from './components/Register/Register';
 import HabitDashboard from './components/HabitDashboard';
 import Friends from './components/Friends';
-//import HabitDashboard from './components/HabitList/HabitList';
-import AddHabit from './components/AddHabit';
 
 
 
