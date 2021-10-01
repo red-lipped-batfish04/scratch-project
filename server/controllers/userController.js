@@ -166,7 +166,8 @@ userController.getMyHabits = async (req, res, next) => {
   const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
   try {
     const myHabits = await db.query(getMyHabitsQuery,[]);
-    console.log('myHabits >>>',myHabits);
+    // console.log('myHabits >>>',myHabits);
+    console.log('in getMyHabits');
     res.locals.myHabits = myHabits.rows;
     return next();
   } catch (err) {
@@ -177,6 +178,7 @@ userController.getMyHabits = async (req, res, next) => {
 
 userController.myTodayGoals = async (req, res, next) => {
  //in getMyHabits, res.locals.myHabits = myHabits.rows;
+ console.log('in myTodayGoals');
  const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
  const todayGoals = [];
  myHabits.forEach(obj=>{
@@ -194,6 +196,7 @@ userController.checkProgress = async (req, res, next) => {
   // EXCEPT, we can't just redirect because we need habitsPageRouter get '/' to finish & return its list of today's habits... so how can we handle this?
   // can we open a new request from here without interrupting the current request?
   // or, do we send back a confirmation to the client that it's time to display video, upon recieving which the client makes a new get request to /video?
+  next();
 }
 
 userController.makeFriendRequest = async (req, res, next) => {};

@@ -14,7 +14,9 @@ router.get('/', userController.getMyHabits, userController.myTodayGoals, userCon
   // return list
   const user=res.locals.user;
   const myHabits=res.locals.myHabits;
-  console.log('myHabits',myHabits);
+  // console.log('myHabits',myHabits);
+  console.log('in /habits');
+
   return res.status(200).json(myHabits);
 });
   

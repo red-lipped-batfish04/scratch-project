@@ -11,6 +11,11 @@ const registerRouter = require('./routes/registerRouter');
 const habitsPageRouter = require('./routes/habitsPageRouter');
 const friendsPageRouter = require('./routes/friendsPageRouter');
 const videoRouter = require('./routes/videoRouter');
+const dailyRouter = require('./routes/dailyRouter');
+
+cron.schedule('59 59 23 * * *', () => {
+  app.use('/daily', dailyRouter);
+})
 
 // allow api for parsing json
 app.use(express.json());
