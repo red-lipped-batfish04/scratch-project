@@ -6,6 +6,7 @@ import Login from './components/Login/Login'
 import Register from './components/Register/Register';
 import HabitDashboard from './components/HabitDashboard';
 import Friends from './components/Friends';
+import Video from './components/Video';
 
 
 
@@ -28,6 +29,9 @@ const App = () => {
 				</Route>
 				<Route path="/friends" exact>
 					<Friends />
+				</Route>
+				<Route path="/video" exact>
+					<Video />
 				</Route>
 				
 			</Switch>

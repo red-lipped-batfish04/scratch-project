@@ -75,7 +75,7 @@ export const EmailLoginForm = (props) => {
   return (
 
     <chakra.form width="full" {...props}>
-    <form>
+ 
       {/* {error && <ErrorMessage message={error}/>} */}
       <FormControl isRequired>
         <FormLabel
@@ -120,7 +120,7 @@ export const EmailLoginForm = (props) => {
       >
         Login
 		</Button>
-    </form>
+
     </chakra.form>
   );
 };

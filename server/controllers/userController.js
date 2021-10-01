@@ -50,11 +50,10 @@ userController.verifyUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     // database query to find user
-    const findUserQuery = `SELECT password, name
+    const findUserQuery = `SELECT password, name, email
     FROM users WHERE email = $1;`;
     const value = [email] ;
     const returnedQuery = await db.query(findUserQuery, value);
-    console.log(returnedQuery.rows[0])
 
     // if returned results does not give back user, redirect back to register page:
     if (returnedQuery.rows[0] === undefined) {
@@ -78,6 +77,7 @@ userController.verifyUser = async (req, res, next) => {
         email: returnedQuery.rows[0]['email'],
       };
       res.locals.registrationStatus = true;
+      console.log(res.locals)
 
       return next();
     }

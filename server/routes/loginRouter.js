@@ -9,7 +9,6 @@ router.post('/', userController.verifyUser, cookieController.createSession, (req
   if (res.locals.registrationStatus === false) {
     return res.status(404).send('User not found');
   }
-  console.log(res.locals)
   return res.status(200).send();
 });
 
