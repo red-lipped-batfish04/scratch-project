@@ -263,11 +263,10 @@ userController.verifyUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     // database query to find user
-    const findUserQuery = `SELECT password, name
+    const findUserQuery = `SELECT password, name, email
     FROM users WHERE email = $1;`;
     const value = [email] ;
     const returnedQuery = await db.query(findUserQuery, value);
-    console.log(returnedQuery.rows[0])
 
     // if returned results does not give back user, redirect back to register page:
     if (returnedQuery.rows[0] === undefined) {
@@ -291,7 +290,7 @@ userController.verifyUser = async (req, res, next) => {
         email: returnedQuery.rows[0]['email'],
       };
       res.locals.registrationStatus = true;
-
+      
       return next();
     }
   }
@@ -302,6 +301,21 @@ userController.verifyUser = async (req, res, next) => {
 };
 
 
+userController.getMyHabits = async (req, res, next) => {
+  //in verifyUser, res.locals.user = {name: name, email: email}. 
+  const email = req.cookies.email;  
+  const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
+  // const alan = 'alan@gmail.com';
+  // const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+  try {
+    const myHabits = await db.query(getMyHabitsQuery,[]);
+    console.log('myHabits >>>',myHabits);
+    res.locals.myHabits = myHabits.rows;
+    return next();
+  } catch (err) {
+    return next({'err': err, message: 'query failed in userController.getMyHabits'});
+  }
+};
 
 
 
@@ -408,6 +422,7 @@ userController.checkProgress = async (req, res, next) => {
   // EXCEPT, we can't just redirect because we need habitsPageRouter get '/' to finish & return its list of today's habits... so how can we handle this?
   // can we open a new request from here without interrupting the current request?
   // or, do we send back a confirmation to the client that it's time to display video, upon recieving which the client makes a new get request to /video?
+  return next();
 }
 
 userController.makeFriendRequest = async (req, res, next) => {};

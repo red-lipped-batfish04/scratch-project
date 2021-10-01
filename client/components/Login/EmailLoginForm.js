@@ -42,7 +42,7 @@ export const EmailLoginForm = (props) => {
       "password" : state.password,
     }
 
-    axios.post('http://localhost:3000/login', payload)
+    axios.post('http://localhost:3000/login', payload, {withCredentials: true})
       .then((res) => {
         if (res.status === 200) {
           setIsLoading(false);
@@ -75,7 +75,7 @@ export const EmailLoginForm = (props) => {
   return (
 
     <chakra.form width="full" {...props}>
-    <form>
+ 
       {/* {error && <ErrorMessage message={error}/>} */}
       <FormControl isRequired>
         <FormLabel
@@ -120,7 +120,7 @@ export const EmailLoginForm = (props) => {
       >
         Login
 		</Button>
-    </form>
+
     </chakra.form>
   );
 };
