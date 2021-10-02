@@ -199,9 +199,9 @@ userController.myTodayGoals = async (req, res, next) => {
   let todayGoals;
   try {
     allCalendar = await db.query('SELECT * FROM user_habit_calendar');
-    console.log('allCalendar @@@@@@@@@@@@@@@@@@@@@@ >>>', allCalendar);
+    // console.log('allCalendar @@@@@@@@@@@@@@@@@@@@@@ >>>', allCalendar);
     todayGoals = await db.query(curUserTodayQuery, [today, email]);
-    console.log('todayGoals @@@@@@@@@@@@@@@@@@@@@@ >>>', todayGoals);
+    // console.log('todayGoals @@@@@@@@@@@@@@@@@@@@@@ >>>', todayGoals);
   } catch (err) {
     return next({err, message: 'query failed in userController.myTodayHabits'});
   }

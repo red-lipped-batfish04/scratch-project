@@ -1,7 +1,18 @@
 import { Box, HStack } from "@chakra-ui/react";
 import * as React from "react";
+import { useHistory } from "react-router";
+
+const handleClick = (history, label) => {
+  let pathname = label.toLowerCase();
+  if (pathname.includes('goal')) pathname = 'habits'; // this is messy. change to switch statement
+  history.push({
+    pathname: `/${pathname}`
+  })
+}
+
 
 const DesktopNavItem = (props) => {
+  const history = useHistory();
 	const { icon, label, href = "#", active } = props;
 	return (
 		<HStack
@@ -27,15 +38,16 @@ const DesktopNavItem = (props) => {
 					{icon}
 				</Box>
 			)}
-			<Box fontWeight="semibold">{label}</Box>
+			<Box onClick={() => {handleClick(history, props.label)}} fontWeight="semibold">{label}</Box>
 		</HStack>
 	);
 };
 
 const MobileNavItem = (props) => {
+  const history = useHistory();
 	const { label, href = "#", active } = props;
 	return (
-		<Box
+		<Box onClick={() => {handleClick(history, props.label)}}
 			as="a"
 			display="block"
 			href={href}
