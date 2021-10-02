@@ -88,25 +88,6 @@ userController.verifyUser = async (req, res, next) => {
 };
 
 
-userController.getMyHabits = async (req, res, next) => {
-  //in verifyUser, res.locals.user = {name: name, email: email}. 
-  const email = res.locals.email; 
-  console.log(typeof email) 
-  const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
-  // const alan = 'alan@gmail.com';
-  // const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
-  try {
-    const myHabits = await db.query(getMyHabitsQuery,[]);
-    console.log('myHabits >>>',myHabits);
-    res.locals.myHabits = myHabits.rows;
-    return next();
-  } catch (err) {
-    return next({'err': err, message: 'query failed in userController.getMyHabits'});
-  }
-};
-
-
-
 userController.deleteAccount = async (req, res, next) => {}; //stretch
 
 
@@ -114,7 +95,10 @@ userController.addHabit = async (req, res, next) => {
   const { habitName } = req.body;
   const getHabitQuery = 'SELECT name FROM habits WHERE name = $1' //query string to check habits table for habitName
   try {
-    const habitExists = await db.query(getHabitQuery, [habitName]).rows[0] === 'habitQuery'; //WHAT IS THE RETURNED DATA TYPE?? ####THIS MAY BE BROKEN
+    const habitNameAttempt = await db.query(getHabitQuery, [habitName]);
+    console.log('habitNameAttempt', habitNameAttempt)
+    const habitExists = habitNameAttempt.rows[0][habitName]; //WHAT IS THE RETURNED DATA TYPE?? ####THIS MAY BE BROKEN
+    console.log('habitExists', habitExists)
     if (!habitExists) {
       const setHabitQuery = 'INSERT INTO habits (name) VALUES $1';
       try {
@@ -128,13 +112,27 @@ userController.addHabit = async (req, res, next) => {
   }
 
   const userHabitJoinQuery = 'INSERT INTO users_habits_join (users_id, habits_id, habit_start_day, habit_frequency) VALUES $1, $2, $3, $4'; // is it ok to leave the rest of these blank? my hope is that they will default to their default values
-  try {
-    db.query(userHabitJoinQuery, [req.cookies.email, habitName, res.locals.today, req.body.habit_frequency])
-    next();
+  let userHabitJoinEntry; //will store the result of db query that adds to users_habits_join
+  try {                                               
+    userHabitJoinEntry = db.query(userHabitJoinQuery, [res.locals.email, habitName, res.locals.today, req.body.habit_frequency]);      
   }
   catch (setUserHabitJoinError) {
       return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
   }
+  const { today } = res.locals;
+  const frequency = req.body.habit_frequency ? req.body.habit_frequency : 1;
+
+  const userHabitCalendarQuery = 'INSERT INTO user_habit_calendar'
+
+  for (let i = today; i < 10000 + today; i+= frequency) { // 10000 is an arbitrary large number
+    try {
+      // save to calendar the days on which the event will occur with id from user_habits_join entry
+      db.query(userHabitCalendarQuery, [i, userHabitJoinEntry.rows[rows.length-1]._id])
+    } catch (err) {
+      return next({err, message: `userHabitCalendarQuery failed in userController.addHabit at index ${i}`})
+    }
+  }
+  return next();
 };
 
 userController.getAllUsers = async(req, res, next) => {
@@ -150,11 +148,12 @@ userController.getAllUsers = async(req, res, next) => {
 userController.setOneHabitStatus = async (req, res, next) => {
   const{ completedToday } = req.body;
   // use req.params.id to refer to the correct habit. id should === habit_id (habit name)
-  const statusQuery = 'UPDATE user_habits_join SET completed_today = $1'; 
-  //########## need to fix this query: update user_habits_join where habit_id === req.params.id & user_id === req.cookies.email, set completed_today = $1
-  // completed_today defaults to false
+  const habitId = req.params.id;
+  const email  = res.locals.email;
+  //update user_habits_join where habit_id === req.params.id & user_id === req.cookies.email, set completed_today = $1
+  const statusQuery = `UPDATE user_habits_join WHERE habit_id = ${habitId} AND user_id = ${email} SET completed_today = $1`; 
   try {
-    const status = await db.query(statusQuery,[completedToday]).rows[0]['completed_today'];
+    const status = await db.query(statusQuery, [completedToday]).rows[0]['completed_today'];
     //client will click a status button which value is boolean;
     res.locals.habitStatus = status;
     return next();
@@ -163,25 +162,28 @@ userController.setOneHabitStatus = async (req, res, next) => {
   }
 };
 
-userController.resetAllHabitStatus = async (req, res, next) => {
-  const current =  new Date().toLocaleString();
-  const currentDate = new Date().toLocaleDateString();
-  let endOfDay = currentDate + ", " + "11:59:59 PM";
-  const resetStatusQuery = 'UPDATE user_habits_join SET completed_today = false';
-  if(current === endOfDay){
-    await db.query(resetStatusQuery);
+
+userController.getMyHabits = async (req, res, next) => {
+  //in verifyUser, res.locals.user = {name: name, email: email}. 
+  const email = res.locals.email;
+  const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = $1`;
+  try {
+    const myHabits = await db.query(getMyHabitsQuery, [email]);
+    console.log('myHabits >>>',myHabits);
+    res.locals.myHabits = myHabits.rows;
+    return next();
+  } catch (err) {
+    return next({'err': err, message: 'query failed in userController.getMyHabits'});
   }
-  return next();
 };
 
 
 userController.myTodayGoals = async (req, res, next) => {
  //in getMyHabits, res.locals.myHabits = myHabits.rows;
+ console.log('in myTodayGoals');
  const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
  const todayGoals = [];
- myHabits.forEach(obj=>{
-   if(!obj.completed_today) todayGoals.push(obj.habits_id);
- }) // ########################### this is testing for the wrong thing. right now it's only returning today's goals that are not completed. we want to return all of today's goals. this will require a query to the database. 
+ // ########################### this is testing for the wrong thing. right now it's only returning today's goals that are not completed. we want to return all of today's goals. this will require a query to the database. 
   //retrieve list of habit names & completed_today values from user_habits_join corresponding to current users_id, that have a users_habits_join_id in the user_habit_calendar on the current day (How this query works: first find all entries in user_habit_calendar where days_since_launch = today. Also find all users_habits_join entries with users_id of current user. Then filter the list from user_habit_calendar further to only include entries with users_habits_join_id’s that occur on the list from users_habits_join. )
 
 
@@ -190,6 +192,7 @@ userController.myTodayGoals = async (req, res, next) => {
 };
 
 userController.checkProgress = async (req, res, next) => {
+  console.log('in get checkProgress');
   // - for each entry in the res.locals.todayGoals, compare its days_missed value with its days_missed_until_reminder value. if they equal each other for any of the entries, redirect to GET /video
   // EXCEPT, we can't just redirect because we need habitsPageRouter get '/' to finish & return its list of today's habits... so how can we handle this?
   // can we open a new request from here without interrupting the current request?

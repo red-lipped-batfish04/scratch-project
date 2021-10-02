@@ -9,6 +9,7 @@ const helperController = require('../controllers/helperController');
 router.get('/', cookieController.verifyToken, userController.getMyHabits, userController.myTodayGoals, userController.checkProgress, (req, res, next) => {
   // first invoke controller to retrieve list of all habits at current date for current user
   // return list
+  console.log('in get /habits');
   const user=res.locals.user;
   const myHabits=res.locals.myHabits;
   return res.status(200).json(myHabits);

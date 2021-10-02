@@ -21,6 +21,7 @@ cookieController.createSession = async (req, res, next) => {
 };
 
 cookieController.verifyToken = async (req, res, next) => {
+  console.log('in get /habits: verifyToken');
   try {
     const token = req.app.locals.token;
     console.log(token)

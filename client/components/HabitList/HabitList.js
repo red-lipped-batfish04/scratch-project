@@ -20,11 +20,12 @@ export const HabitList = () => {
 
 	useEffect(() => {
         console.log('in useEffect');
-        fetch('http://localhost:3000/habits',{headers : { 
+        fetch('http://localhost:3000/habits', 
+          {headers : { 
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
             }
-           })
+          })
           .then(response => response.json()) //[{name:aa},{name:bb}]
           .then(result => {
              console.log('result from backend',result);
