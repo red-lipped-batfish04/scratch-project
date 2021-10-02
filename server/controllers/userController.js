@@ -76,6 +76,7 @@ userController.verifyUser = async (req, res, next) => {
         email: returnedQuery.rows[0]['email'],
       };
       res.locals.registrationStatus = true;
+      req.app.locals.email = {email: returnedQuery.rows[0]['email']};
       
       return next();
     }
@@ -89,7 +90,8 @@ userController.verifyUser = async (req, res, next) => {
 
 userController.getMyHabits = async (req, res, next) => {
   //in verifyUser, res.locals.user = {name: name, email: email}. 
-  const email = req.cookies.email;  
+  const email = res.locals.email; 
+  console.log(typeof email) 
   const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
   // const alan = 'alan@gmail.com';
   // const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
@@ -170,22 +172,6 @@ userController.resetAllHabitStatus = async (req, res, next) => {
     await db.query(resetStatusQuery);
   }
   return next();
-};
-
-userController.getMyHabits = async (req, res, next) => {
-  //in verifyUser, res.locals.user = {name: name, email: email}. 
-  //const user=res.locals.user;
-  //const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${user.email}`;
-  const alan = 'alan@gmail.com';
-  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
-  try {
-    const myHabits = await db.query(getMyHabitsQuery,[]);
-    console.log('myHabits >>>',myHabits);
-    res.locals.myHabits = myHabits.rows;
-    return next();
-  } catch (err) {
-    return next({'err': err, message: 'query failed in userController.getMyHabits'});
-  }
 };
 
 
