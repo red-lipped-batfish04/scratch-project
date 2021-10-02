@@ -18,7 +18,6 @@ const HomePage = () => {
 	// I just created this so that we can easily get to the habit dashboard until auth is done
 	const history = useHistory();
 	const loginRedirect = () => {
-		console.log("I like Turtles");
 		history.push("/login");
 	};
 
@@ -46,7 +45,7 @@ const HomePage = () => {
 					}}
 					onClick={loginRedirect}
 				>
-					Login with Google
+					Login
 				</Button>
 				<div></div>
 				<Button
