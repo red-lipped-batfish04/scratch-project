@@ -6,8 +6,8 @@ const helperController = {};
 
 helperController.getToday = async (req, res, next) => {
   try {
-    const today = db.query('SELECT today FROM today');
-    res.locals.today = today;
+    const today = await db.query('SELECT today FROM today');
+    res.locals.today = today.rows[0]['today'];
     return next();
   } catch (err) {
     return next({'err': err, message: 'getToday query failed in helperController.getToday'});
