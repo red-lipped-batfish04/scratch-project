@@ -26,20 +26,20 @@ export const HabitList = () => {
             'Accept': 'application/json',
             }
           })
-          .then(response => response.json()) //[{name:aa},{name:bb}]
+          .then(response => response.json()) 
           .then(result => {
              console.log('result from backend',result);
-             const todayGoalsFolder = ['test1 ','test2'];
+             const todayGoalsFolder = [];
              console.log('folder in useEffect >>',todayGoalsFolder);
             result.forEach(obj=>{
-				 //if(!obj.completed_today)
+				 
           todayGoalsFolder.push(obj.habits_id);
         })
 				console.log('folder in useEffect >>',todayGoalsFolder);
 				setTodayGoals(todayGoalsFolder);
             
       });
-  }, ['test1']);
+  }, []);
 	    
 	console.log('todayGoals',todayGoals);
 

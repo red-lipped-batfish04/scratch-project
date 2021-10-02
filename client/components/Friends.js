@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { ChakraProvider} from "@chakra-ui/react";
 import { Box,Avatar,Button } from "@chakra-ui/react";
+import axios from 'axios';
 
 
 const AllUsers = (props) => { 
 
     const [allUsers,setAllUsers] = useState([]);
+    const [userEmails,setUserEmails]=useState([]);
 
+    
+
+    const addFriend = (e) => {
+      
+      const id = e.target.id;  
+  
+  console.log("id before fetch",id);
+  fetch(`http://localhost:3000/friends/:id`,{method:'POST'},id)
+  
+  .then(response => response.json())
+  .then(result => {
+    console.log(result)
+    
+  });
+  
+  };
     
 
     //get all users from server and update allUsers arr;
@@ -17,19 +35,24 @@ const AllUsers = (props) => {
             'Accept': 'application/json'
             }
            })
-          .then(response => response.json()) //[{name:aa},{name:bb}]
+          .then(response => response.json()) //[{name:aa email:1@gmail.com},{name:bb}]
           .then(result => {
-           
+            const userEmail =[];
             const folder = [];
             console.log('folder in useEffect >>',folder);
+            console.log('userEmail in useEffect >>',userEmail);
             result.forEach(obj=>{
+                console.log('obj in forEach',obj)
+                
                 folder.push(obj.name);
+                userEmail.push(obj.email);
+                
             })
             
             console.log('folder in useEffect >>',folder);
     
             setAllUsers(folder);
-            
+            setUserEmails(userEmail);
           });
       },[]);
 
@@ -44,11 +67,15 @@ const AllUsers = (props) => {
       
       const renderUsers = (users) =>{
            let name;
+           let email;
            let i=0;
+
            //each loop change the users index to get every user 
         return users.map((user)=>{
-           name=users[i] 
-           console.log('name',name)
+           name=users[i];
+           email=userEmails[i];//match each addFriend btn id;
+           console.log('name',name);
+           console.log('email',email);
            i++
            
             return (
@@ -91,7 +118,7 @@ const AllUsers = (props) => {
        
                    
                    <br/>
-                   <Button colorScheme="teal" size="sm">
+                   <Button id={email} onClick={addFriend} colorScheme="teal" size="sm">
                      Add Friend
                    </Button>
            

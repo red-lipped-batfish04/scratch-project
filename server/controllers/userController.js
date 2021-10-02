@@ -350,7 +350,7 @@ userController.addHabit = async (req, res, next) => {
 };
 
 userController.getAllUsers = async(req, res, next) => {
-  const getAllUsersQuery = 'SELECT name FROM users'; 
+  const getAllUsersQuery = 'SELECT name,email FROM users'; 
   const allUsers = await db.query(getAllUsersQuery,[])
   console.log('allusers >>>>',allUsers)
   res.locals.allUsers = allUsers.rows;
@@ -413,6 +413,16 @@ userController.checkProgress = async (req, res, next) => {
   // or, do we send back a confirmation to the client that it's time to display video, upon recieving which the client makes a new get request to /video?
   return next();
 }
+userController.addFriendRequest = async (req, res, next) => {
+  //const id1 = req.params.id;
+  const id = req.body.id
+  const email= res.locals.email
+  console.log('req.body',req.body);
+  const addFriendQuery = `INSERT INTO friends (_id,friend_a,friend_b) VALUES (1,${id},${id})`;
+  const addFriend = db.query(addFriendQuery,[]);
+  res.local.friendId = friendId;
+  return next();
+};
 
 userController.makeFriendRequest = async (req, res, next) => {};
 

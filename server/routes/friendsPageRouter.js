@@ -21,6 +21,17 @@ router.get('/', (req, res, next) => {
 
 });
 
+router.post('/:id',userController.addFriendRequest, (req, res, next) => {
+  const friendId = res.locals.friendId;
+  if (friendId) {
+    console.log('get friendId',friendId)
+    return res.status(200).json(friendId);
+  }else{
+    console.log('NOT get friendId',friendId)
+    return res.json('err in post friend in server.js');
+  }
+
+});
 router.post('/', (req, res, next) => {
   // first invoke controller to make friend request
   // return confirmation
