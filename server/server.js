@@ -8,9 +8,14 @@ const cron = require('node-cron');
 
 const loginRouter = require('./routes/loginRouter');
 const registerRouter = require('./routes/registerRouter');
-const friendsPageRouter = require('./routes/friendsPageRouter');
 const habitsPageRouter = require('./routes/habitsPageRouter');
-// const videoRouter = require('./routes/videoRouter');
+const videoRouter = require('./routes/videoRouter');
+const friendsPageRouter = require('./routes/friendsPageRouter');
+const dailyRouter = require('./routes/dailyRouter');
+
+cron.schedule('59 59 23 * * *', () => {
+  app.use('/daily', dailyRouter);
+});
 
 // allow api for parsing json
 app.use(express.json());
