@@ -303,10 +303,10 @@ userController.verifyUser = async (req, res, next) => {
 
 userController.getMyHabits = async (req, res, next) => {
   //in verifyUser, res.locals.user = {name: name, email: email}. 
-  const email = req.cookies.email;  
+  const email = req.cookies.email;  //res.locals.email or res.cookies.email
   const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
   // const alan = 'alan@gmail.com';
-  // const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+   //const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
   try {
     const myHabits = await db.query(getMyHabitsQuery,[]);
     console.log('myHabits >>>',myHabits);
@@ -386,21 +386,21 @@ userController.resetAllHabitStatus = async (req, res, next) => {
   return next();
 };
 
-userController.getMyHabits = async (req, res, next) => {
-  //in verifyUser, res.locals.user = {name: name, email: email}. 
-  // const email = req.cookies.email;  
-  // const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
-  const alan = 'alan@gmail.com';
-  const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
-  try {
-    const myHabits = await db.query(getMyHabitsQuery,[]);
-    console.log('myHabits >>>',myHabits);
-    res.locals.myHabits = myHabits.rows;
-    return next();
-  } catch (err) {
-    return next({'err': err, message: 'query failed in userController.getMyHabits'});
-  }
-};
+// userController.getMyHabits = async (req, res, next) => {
+//   //in verifyUser, res.locals.user = {name: name, email: email}. 
+//   // const email = req.cookies.email;  
+//   // const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = ${email}`;
+//   const alan = 'alan@gmail.com';
+//   const getMyHabitsQuery = 'SELECT * FROM users_habits_join WHERE _id = 4 ' ;//only dor testing. should query WHERE users_id to verify user.
+//   try {
+//     const myHabits = await db.query(getMyHabitsQuery,[]);
+//     console.log('myHabits >>>',myHabits);
+//     res.locals.myHabits = myHabits.rows;
+//     return next();
+//   } catch (err) {
+//     return next({'err': err, message: 'query failed in userController.getMyHabits'});
+//   }
+// };
 
 
 userController.myTodayGoals = async (req, res, next) => {

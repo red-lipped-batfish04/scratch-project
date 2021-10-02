@@ -26,11 +26,44 @@ cookieController.verifyToken = async (req, res, next) => {
     if (verification) {
       res.locals.tokenVerification = true;
       res.locals.email = verification.email;
+      //console.log('email',res.locals.email)
     }
-    else res.locals.tokenVerification = false;
+    else req.locals.tokenVerification = false;
     return next();
   }
   catch (err) {return next(err);}
 };
+
+cookieController.token = async (req, res, next) => {
+
+  // Get token from cookie named token
+  const token = req.cookies.ssid || '';
+
+  try {
+
+      // Check if cookie exists, maybe expired maybe user didnt have one - no login
+      if (!token) {
+          return next();
+      }
+
+      // Decrypt users jwt token and get information
+      const decrypt = await jwt.verify(token, process.env.JWT_KEY);
+
+      // Pass that infomation to request user object
+      
+        req.locals.email = decrypt.id,
+        req.locals.tokenVerification =true;
+      
+
+      // Continue with exectution of app
+      return next();
+
+  } catch (err) {
+
+      return res.status(500).json(err.toString());
+
+  }
+};
+
 
 module.exports = cookieController;
