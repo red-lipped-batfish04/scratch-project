@@ -19,18 +19,19 @@ export const HabitList = () => {
   
 
 	useEffect(() => {
-    console.log('in useEffect');
-    fetch('http://localhost:3000/habits',{headers : { 
-    	'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    	}
-    })
-      .then(response => response.json()) //[{name:aa},{name:bb}]
-      .then(result => {
-        console.log('result from backend',result);
-        const todayGoalsFolder = ['test1 ','test2'];
-        console.log('folder in useEffect >>',todayGoalsFolder);
-        result.forEach(obj => {
+        console.log('in useEffect');
+        fetch('http://localhost:3000/habits', 
+          {headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            }
+          })
+          .then(response => response.json()) //[{name:aa},{name:bb}]
+          .then(result => {
+             console.log('result from backend',result);
+             const todayGoalsFolder = ['test1 ','test2'];
+             console.log('folder in useEffect >>',todayGoalsFolder);
+            result.forEach(obj=>{
 				 //if(!obj.completed_today)
           todayGoalsFolder.push(obj.habits_id);
         })

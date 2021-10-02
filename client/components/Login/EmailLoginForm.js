@@ -45,13 +45,17 @@ export const EmailLoginForm = (props) => {
     axios.post('http://localhost:3000/login', payload, {withCredentials: true})
       .then((res) => {
         if (res.status === 200) {
+          console.log('this is the data received from server:    ', res.data)
           setIsLoading(false);
           setState(prevState => ({
             ...prevState,
             'success' : 'Log in successful, redirecting to homepage...'
           }))
           // push to homepage
-          history.push('/habits')
+          history.push({
+            pathname: '/habits',
+            state: {token: res.data}
+        })
         }
         else if (res.status === 204) {
           setError('Invalid email or password');
