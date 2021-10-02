@@ -18,7 +18,7 @@ router.get('/', cookieController.verifyToken, userController.getMyHabits, userCo
 router.post('/addHabit', helperController.getToday, userController.addHabit, userController.getMyHabits, userController.myTodayGoals, (req, res, next) => {
   // first invoke controller to write to DB info for new habit
   // return updated list of today's goals
-  return res.status(200).json(res.locals.myHabits);
+  return res.status(200).json(res.locals.todayGoals);
 });
 
 router.put('/completed/:id', userController.setOneHabitStatus, (req, res, next) => {
