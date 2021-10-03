@@ -60,7 +60,6 @@ export const InputCard = (props) => (
 			>
 				Record your WHY
 			</Button>
-				<ModalPop />
 		</Card>
 	</Stack>
 );
