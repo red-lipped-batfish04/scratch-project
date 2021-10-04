@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { Flex, HStack, useColorModeValue as mode } from "@chakra-ui/react";
+import { MobileHamburgerMenu } from "./MobileHamburgerMenu";
+import { Notification } from "./Notification";
+import { PageContent } from "./PageContent";
+import { PageHeader } from "./PageHeader";
 import { ChakraProvider} from "@chakra-ui/react";
-import { Box,Avatar,Button } from "@chakra-ui/react";
+import { Box,Badge,Avatar,Button } from "@chakra-ui/react";
+import { NavMenu } from "./NavMenu";
+import { useMobileMenuState } from "./useMobileMenuState";
 import axios from 'axios';
 
 
 const AllUsers = (props) => { 
+	const { isMenuOpen, toggle } = useMobileMenuState();
 
     const [allUsers,setAllUsers] = useState([]);
     const [userEmails,setUserEmails]=useState([]);
@@ -133,14 +141,49 @@ const AllUsers = (props) => {
     }
     
       return (
-     
-          
+        <Flex direction="column" bg={mode("gray.100", "gray.800")} height="100vh">
+        <Flex align="center" bg="blue.400" color="white" px="6" minH="16">
+          <Flex justify="space-between" align="center" w="full">
+            <MobileHamburgerMenu onClick={toggle} isOpen={isMenuOpen} />
+            <NavMenu.Mobile isOpen={isMenuOpen} />
+  
+            {/* Desktop Logo placement */}
+            {/* <Logo
+              display={{
+                base: "none",
+                lg: "block",
+              }}
+              flexShrink={0}
+              h="5"
+              marginEnd="10"
+            /> */}
+  
+            {/* Desktop Navigation Menu */}
+            <NavMenu.Desktop />
+  
+            {/* Mobile Logo placement */}
+            {/* <Logo
+              flex={{
+                base: "1",
+                lg: "0",
+              }}
+              display={{
+                lg: "none",
+              }}
+              flexShrink={0}
+              h="5"
+            /> */}
+  
+          </Flex>
+        </Flex>
+  
+        <PageHeader />
+        <div>
+          {renderUsers(allUsers)}
+        </div>
+      </Flex>
         
-       <div>
        
-       
-        {renderUsers(allUsers)}
-       </div>
         
        
       

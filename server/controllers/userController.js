@@ -306,45 +306,52 @@ userController.deleteAccount = async (req, res, next) => {}; //stretch
 
 
 userController.addHabit = async (req, res, next) => {
-  const { habitName } = req.body;
-  const getHabitQuery = 'SELECT name FROM habits WHERE name = $1' //query string to check habits table for habitName
-  try {
-    const habitNameAttempt = await db.query(getHabitQuery, [habitName]);
-    console.log('habitNameAttempt', habitNameAttempt)
-    const habitExists = habitNameAttempt.rows[0][habitName]; //WHAT IS THE RETURNED DATA TYPE?? ####THIS MAY BE BROKEN
-    console.log('habitExists', habitExists)
+  const { habits_id } = req.body;
+  const today = req.body.start_day || res.locals.today;
+  const frequency = req.body.habit_frequency || 1;
+  const email = res.locals.email || 'test@gmail.com';
+
+  const getHabitQuery = 'SELECT name FROM habits WHERE name = $1' 
+  try { // check habits table for habits_id
+    const habitNameAttempt = await db.query(getHabitQuery, [habits_id]);
+    const habitExists = habitNameAttempt.rows[0] ? true : false; 
     if (!habitExists) {
-      const setHabitQuery = 'INSERT INTO habits (name) VALUES $1';
+      const setHabitQuery = 'INSERT INTO habits (name) VALUES ($1)';
       try {
-        await db.query(setHabitQuery, [habitName]);
+        await db.query(setHabitQuery, [habits_id]);
       } catch (setQueryError) {
         return next({'err': setQueryError, message: 'setHabit query failed in userController.addHabit'})
       }
     }
   } catch (getQueryError) {
     return next({'err': getQueryError, message: 'getHabit query failed in userController.addHabit'})
-  }
-
-  const userHabitJoinQuery = 'INSERT INTO users_habits_join (users_id, habits_id, habit_start_day, habit_frequency) VALUES $1, $2, $3, $4'; // is it ok to leave the rest of these blank? my hope is that they will default to their default values
+  }   
+  const userHabitJoinQuery = 'INSERT INTO users_habits_join (users_id, habits_id, habits_start_day, habit_frequency) VALUES ($1, $2, $3, $4)'; 
   let userHabitJoinEntry; //will store the result of db query that adds to users_habits_join
-  try {                                               
-    userHabitJoinEntry = db.query(userHabitJoinQuery, [res.locals.email, habitName, res.locals.today, req.body.habit_frequency]);      
+  try {       
+    await db.query(userHabitJoinQuery, [email, habits_id, today, frequency]); //for testing. in launch, use line below.
+    // userHabitJoinEntry = await db.query(userHabitJoinQuery, [res.locals.email, habits_id, today, frequency]);      
   }
   catch (setUserHabitJoinError) {
       return next({'err': setUserHabitJoinError, message: 'getHabit query failed in userController.addHabit'})
   }
-  const { today } = res.locals;
-  const frequency = req.body.habit_frequency ? req.body.habit_frequency : 1;
-
-  const userHabitCalendarQuery = 'INSERT INTO user_habit_calendar'
-
-  for (let i = today; i < 10000 + today; i+= frequency) { // 10000 is an arbitrary large number
-    try {
+  const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = $1`;
+  try { // THIS IS MESSY. COPIED FROM getMyHabits. REFACTOR
+    userHabitJoinEntry = await db.query(getMyHabitsQuery, [email]);
+  } catch (err) {
+    return next({'err': err, message: 'query failed in userController.getMyHabits'});
+  }
+  const userHabitCalendarQuery = 'INSERT INTO user_habit_calendar (days_since_launch, user_habits_join_id) VALUES ($1, $2)'
+  // populate the calendar with events
+  try { // ###### NOT SURE why this only runs once. ######################
+    for (let i = today; i < 10000 + today; i+= frequency) { // 10000 is an arbitrary large number
+      console.log(i);
+      console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
       // save to calendar the days on which the event will occur with id from user_habits_join entry
-      db.query(userHabitCalendarQuery, [i, userHabitJoinEntry.rows[rows.length-1]._id])
-    } catch (err) {
-      return next({err, message: `userHabitCalendarQuery failed in userController.addHabit at index ${i}`})
+       db.query(userHabitCalendarQuery, [i, userHabitJoinEntry.rows[userHabitJoinEntry.rows.length-1]._id]);
     }
+  } catch (err) {
+    return next({err, message: `userHabitCalendarQuery failed in userController.addHabit`})
   }
   return next();
 };
@@ -355,9 +362,7 @@ userController.getAllUsers = async(req, res, next) => {
   console.log('allusers >>>>',allUsers)
   res.locals.allUsers = allUsers.rows;
   return next();
-
 }
-
 
 userController.setOneHabitStatus = async (req, res, next) => {
   const{ completedToday } = req.body;
@@ -379,11 +384,10 @@ userController.setOneHabitStatus = async (req, res, next) => {
 
 userController.getMyHabits = async (req, res, next) => {
   //in verifyUser, res.locals.user = {name: name, email: email}. 
-  const email = res.locals.email;
+  const email = res.locals.email || 'test@gmail.com';
   const getMyHabitsQuery = `SELECT * FROM users_habits_join WHERE users_id = $1`;
   try {
     const myHabits = await db.query(getMyHabitsQuery, [email]);
-    console.log('myHabits >>>',myHabits);
     res.locals.myHabits = myHabits.rows;
     return next();
   } catch (err) {
@@ -393,16 +397,32 @@ userController.getMyHabits = async (req, res, next) => {
 
 
 userController.myTodayGoals = async (req, res, next) => {
- //in getMyHabits, res.locals.myHabits = myHabits.rows;
- console.log('in myTodayGoals');
- const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
- const todayGoals = [];
- // ########################### this is testing for the wrong thing. right now it's only returning today's goals that are not completed. we want to return all of today's goals. this will require a query to the database. 
-  //retrieve list of habit names & completed_today values from user_habits_join corresponding to current users_id, that have a users_habits_join_id in the user_habit_calendar on the current day (How this query works: first find all entries in user_habit_calendar where days_since_launch = today. Also find all users_habits_join entries with users_id of current user. Then filter the list from user_habit_calendar further to only include entries with users_habits_join_id’s that occur on the list from users_habits_join. )
-
-
- res.locals.todayGoals = todayGoals;
- return next(); 
+  //in getMyHabits, res.locals.myHabits = myHabits.rows;
+  const email = res.locals.email || 'test@gmail.com';
+  const today = res.locals.today;
+  const myHabits = res.locals.myHabits;//[{1~12},{1~12}]
+  // const allUsersTodayQuery = `SELECT * FROM user_habit_calendar WHERE days_since_launch = $1`;
+  // let allUsersToday;
+  // try {
+  //   allUsersToday = await db.query(allUsersTodayQuery, [today]);
+  //   console.log('allUsersToday @@@@@@@@@@@@@@@@@@@@@@ >>>', allUsersToday);
+  // } catch (err) {
+    // return next({err, message: 'query failed in userController.myTodayHabits'});
+  // }
+  const curUserTodayQuery = 'SELECT users_habits_join.* FROM users_habits_join JOIN user_habit_calendar ON user_habit_calendar.user_habits_join_id = users_habits_join._id WHERE user_habit_calendar.days_since_launch = $1 AND users_habits_join.users_id = $2';
+  let todayGoals;
+  try {
+    allCalendar = await db.query('SELECT * FROM user_habit_calendar');
+    // console.log('allCalendar @@@@@@@@@@@@@@@@@@@@@@ >>>', allCalendar);
+    todayGoals = await db.query(curUserTodayQuery, [today, email]);
+    // console.log('todayGoals @@@@@@@@@@@@@@@@@@@@@@ >>>', todayGoals);
+  } catch (err) {
+    return next({err, message: 'query failed in userController.myTodayHabits'});
+  }
+  //retrieve list of habit names & completed_today values from user_habits_join corresponding to current users_id, that have a users_habits_join_id in the user_habit_calendar on the current day 
+  //(How this query works: first find all entries in user_habit_calendar where days_since_launch = today. Also find all users_habits_join entries with users_id of current user. Then filter the list from user_habit_calendar further to only include entries with users_habits_join_id’s that occur on the list from users_habits_join. )
+  res.locals.todayGoals = todayGoals.rows;
+  return next(); 
 };
 
 userController.checkProgress = async (req, res, next) => {
