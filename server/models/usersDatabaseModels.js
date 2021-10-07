@@ -1,11 +1,7 @@
 const { Pool } = require('pg');
 
-const PG_URI = 'postgres://kpnpairo:A2rGm09Cx29EgB6hdfRIyRxaqE-k7TaJ@fanny.db.elephantsql.com/kpnpairo';
-
 // create a new pool here using the connection string above
-const pool = new Pool({
-  connectionString: PG_URI
-});
+const pool = new Pool();
 
 // We export an object that contains a property called query,
 // which is a function that returns the invocation of pool.query() after logging the query
