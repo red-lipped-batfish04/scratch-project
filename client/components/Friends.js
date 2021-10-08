@@ -19,26 +19,21 @@ const AllUsers = (props) => {
 
     //get all users from server and update allUsers arr;
     useEffect(() => {
-        console.log('in useEffect');
-        fetch('http://localhost:3000/friends',{headers : { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            }
-           })
-          .then(response => response.json()) //[{name:aa},{name:bb}]
-          .then(result => {
-           
-            const folder = [];
+        console.log('FRIENDS: in useEffect');
+
+        axios.get('http://localhost:3000/friends')
+        .then(res => {
+          console.log('res', res);
+          const folder = [];
             console.log('folder in useEffect >>',folder);
-            result.forEach(obj=>{
+            res.data.forEach(obj=>{
                 folder.push(obj.name);
             })
             
             console.log('folder in useEffect >>',folder);
     
             setAllUsers(folder);
-            
-          });
+        });
       },[]);
 
 

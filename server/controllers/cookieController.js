@@ -23,7 +23,8 @@ cookieController.createSession = async (req, res, next) => {
 cookieController.verifyToken = async (req, res, next) => {
   console.log('in get /habits: verifyToken');
   try {
-    const token = req.app.locals.token;
+    //const token = req.app.locals.token;
+    const token = req.cookies['ssid'];
     console.log(token)
     const verification = await jwt.verify(token, 'process.env.SECRET_SALT');
     if (verification) {
