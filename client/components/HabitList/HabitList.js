@@ -4,6 +4,7 @@ import { DraggableListItem } from "./DraggableListItem";
 import { useDraggableList } from "./useDraggableList";
 import AddHabits from "../AddHabitModal/AddHabits";
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
 export const HabitList = () => {
 	// all of the elements in this array must be unqiue or it causes an issue on rendering that creates extra list items
@@ -17,8 +18,20 @@ export const HabitList = () => {
 	useDraggableList(todayGoals);
 
 	useEffect(() => {
-		console.log("in useEffect");
-		fetch("http://localhost:3000/habits", {
+		console.log("HabitList: in useEffect");
+
+		axios.get('http://localhost:3000/habits')
+		.then(res => {
+			const todayGoalsFolder = [];
+				res.data.forEach((obj) => {
+					//if(!obj.completed_today)
+					todayGoalsFolder.push(obj.habits_id);
+				});
+
+				setTodayGoals(todayGoalsFolder);
+		});
+
+		/*fetch("http://localhost:3000/habits", {
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
@@ -33,7 +46,7 @@ export const HabitList = () => {
 				});
 
 				setTodayGoals(todayGoalsFolder);
-			});
+			});*/
 	}, [""]);
 
 	console.log("todayGoals", todayGoals);
