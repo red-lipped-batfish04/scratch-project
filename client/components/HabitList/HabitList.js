@@ -20,7 +20,7 @@ export const HabitList = () => {
 	useEffect(() => {
 		console.log("HabitList: in useEffect");
 
-		axios.get('http://localhost:3000/habits')
+		axios.get('/api/habits')
 		.then(res => {
 			const todayGoalsFolder = [];
 				res.data.forEach((obj) => {

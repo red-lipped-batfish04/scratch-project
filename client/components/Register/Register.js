@@ -53,7 +53,7 @@ const Register = (props) => {
         "phoneNumber": state.phoneNumber,
       };
 
-      axios.post('http://localhost:3000/register', payload)
+      axios.post('/api/register', payload)
       .then(res => {
         if (res.status === 200) {
           setState(prevState => ({
