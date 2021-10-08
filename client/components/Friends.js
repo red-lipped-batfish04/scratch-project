@@ -21,7 +21,7 @@ const AllUsers = (props) => {
     useEffect(() => {
         console.log('FRIENDS: in useEffect');
 
-        axios.get('http://localhost:3000/friends')
+        axios.get('/api/friends')
         .then(res => {
           console.log('res', res);
           const folder = [];

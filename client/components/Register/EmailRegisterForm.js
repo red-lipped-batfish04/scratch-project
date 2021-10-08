@@ -46,7 +46,7 @@ export const EmailRegisterForm = (props) => {
 					"phoneNumber": state.phoneNumber,
 				};
 	
-				axios.post('http://localhost:3000/register', payload, {withCredentials: true})
+				axios.post('/api/register', payload, {withCredentials: true})
 				.then(res => {
 					if (res.status === 200) {
 						setState(prevState => ({

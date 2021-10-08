@@ -31,10 +31,10 @@ app.use(cookieParser());
 // express rendering of static imgs, etc.
 app.use(express.static(__dirname + "../public"));
 
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
-app.use('/habits', habitsPageRouter);
-app.use('/friends', friendsPageRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/register', registerRouter);
+app.use('/api/habits', habitsPageRouter);
+app.use('/api/friends', friendsPageRouter);
 // app.use('/video', videoRouter);
 
 
